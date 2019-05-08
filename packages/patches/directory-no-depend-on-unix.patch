@@ -1,0 +1,52 @@
+diff --color -Nur directory.orig/System/Directory.hs directory/System/Directory.hs
+--- directory.orig/System/Directory.hs	2019-05-08 21:27:28.061987746 +0800
++++ directory/System/Directory.hs	2019-05-08 21:28:20.374990351 +0800
+@@ -305,40 +305,14 @@
+ createDirectoryIfMissing :: Bool     -- ^ Create its parents too?
+ 		         -> FilePath -- ^ The path to the directory you want to make
+ 		         -> IO ()
+-createDirectoryIfMissing create_parents path0
+-  | create_parents = createDirs (parents path0)
+-  | otherwise      = createDirs (take 1 (parents path0))
+-  where
+-    parents = reverse . scanl1 (</>) . splitDirectories . normalise
+-
+-    createDirs []         = return ()
+-    createDirs (dir:[])   = createDir dir throw
+-    createDirs (dir:dirs) =
+-      createDir dir $ \_ -> do
+-        createDirs dirs
+-        createDir dir throw
+-
+-    createDir :: FilePath -> (IOException -> IO ()) -> IO ()
+-    createDir dir notExistHandler = do
+-      r <- try $ createDirectory dir
+-      case (r :: Either IOException ()) of
+-        Right ()                   -> return ()
+-        Left  e
+-          | isDoesNotExistError  e -> notExistHandler e
+-          -- createDirectory (and indeed POSIX mkdir) does not distinguish
+-          -- between a dir already existing and a file already existing. So we
+-          -- check for it here. Unfortunately there is a slight race condition
+-          -- here, but we think it is benign. It could report an exeption in
+-          -- the case that the dir did exist but another process deletes the
+-          -- directory and creates a file in its place before we can check
+-          -- that the directory did indeed exist.
+-          | isAlreadyExistsError e ->
+-              (withFileStatus "createDirectoryIfMissing" dir $ \st -> do
+-                 isDir <- isDirectory st
+-                 if isDir then return ()
+-                          else throw e
+-              ) `catch` ((\_ -> return ()) :: IOException -> IO ())
+-          | otherwise              -> throw e
++createDirectoryIfMissing parents file = do
++  b <- doesDirectoryExist file
++  case (b,parents, file) of
++    (_,     _, "") -> return ()
++    (True,  _,  _) -> return ()
++    (_,  True,  _) -> mapM_ (createDirectoryIfMissing False) $ mkParents file
++    (_, False,  _) -> createDirectory file
++ where mkParents = scanl1 (</>) . splitDirectories . normalise
+ 
+ #if __GLASGOW_HASKELL__
+ {- | @'removeDirectory' dir@ removes an existing directory /dir/.  The
