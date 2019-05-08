@@ -90,10 +90,11 @@ build_package() {
 	fi
 	HugsSetup="$runhugs -98 $setup_script"
 
-	case "$happy" in
-	'')	happyflag= ;;
-	/*)	happyflag="--with-happy=$happy" ;;
-	*)	happyflag="--with-happy=$top_dir/$happy" ;;
+	# HACK: only haskell-src need happy to build
+	case "$source_dir" in
+	*/haskell-src)
+		happyflag="--with-happy=$top_dir/libraries/tools/happy$bat" ;;
+	*)  happyflag= ;;
 	esac
 
 	export PATH="$top_dir/src:$PATH"
@@ -106,6 +107,7 @@ build_package() {
 			--with-compiler="$ffihugs" \
 			--with-hugs="$top_dir/src/hugs" \
 			$happyflag
+
 	if $HugsSetup build --verbose; then
 		for name in LICEN[CS]E* COPYING* COPYRIGHT* copyright; do
 			if test -f $name; then
