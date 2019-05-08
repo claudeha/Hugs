@@ -1,9 +1,9 @@
 #!/bin/sh
 
-# Create libraries sufficient for runhugs, ffihugs, cpphs, hsc2hs and
+# Create libraries sufficient for runhugs, ffihugs, cpphs, hsc2hs, happy and
 # Cabal scripts.
 
-boot_packages='array base Cabal containers directory filepath haskell98 old-locale old-time pretty process random'
+boot_packages='array base Cabal containers directory filepath haskell98 old-locale old-time pretty process random mtl'
 
 # ensure that letter ranges work
 LC_ALL=C
