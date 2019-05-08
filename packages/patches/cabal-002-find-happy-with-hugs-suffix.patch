@@ -1,0 +1,12 @@
+diff --color -Nur Cabaln/Distribution/Simple/Program.hs Cabal/Distribution/Simple/Program.hs
+--- Cabaln/Distribution/Simple/Program.hs	2019-05-09 00:34:54.003547828 +0800
++++ Cabal/Distribution/Simple/Program.hs	2019-05-09 00:35:12.985548773 +0800
+@@ -630,7 +630,7 @@
+ ffihugsProgram = simpleProgram "ffihugs"
+ 
+ happyProgram :: Program
+-happyProgram = (simpleProgram "happy") {
++happyProgram = (simpleProgram "happy-hugs") {
+     programFindVersion = findProgramVersion "--version" $ \str ->
+       -- Invoking "happy --version" gives a string like
+       -- "Happy Version 1.16 Copyright (c) ...."
