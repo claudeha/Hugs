@@ -81,6 +81,11 @@ for package in $boot_packages
 do
 	package_dir=$source/$package
 
+    # don't rely on $topdir/Makefile to run autoreconf on packages.
+    if [ ! -f $package_dir/configure ] && [ -f $$dir/configure.ac ]; then
+        (cd $package_dir; autoreconf)
+    fi
+
 	# configure the library package first
 
 	if test -x $package_dir/configure; then
