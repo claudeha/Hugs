@@ -1,0 +1,20 @@
+diff --color -Nur happy.orig/Setup.lhs happy/Setup.lhs
+--- happy.orig/Setup.lhs	2019-05-09 00:25:21.147519298 +0800
++++ happy/Setup.lhs	2019-05-09 00:25:32.940519885 +0800
+@@ -21,6 +21,7 @@
+ 					      instHook  = myInstall }
+ 
+ perlProgram = simpleProgram "perl"
++cpphshugsProgram = simpleProgram "cpphs-hugs"
+ 
+ -- hack to turn cpp-style '# 27 "GenericTemplate.hs"' into 
+ -- '{-# LINE 27 "GenericTemplate.hs" #-}'.
+@@ -30,7 +31,7 @@
+ myPostBuild _ flags _ lbi = do
+   let runProgram p = rawSystemProgramConf (buildVerbose flags) p (withPrograms lbi)
+       cpp_template src dst opts = do
+-        runProgram ghcProgram (["-o", dst, "-E", "-cpp", "templates" </> src] ++ opts)
++        runProgram cpphshugsProgram (["-o", dst, "-E", "--cpp", "templates" </> src] ++ opts)
+ 	runProgram perlProgram ["-i.bak", "-pe", crazy_perl_regexp, dst]
+ 
+   sequence_ ([ cpp_template "GenericTemplate.hs" dst opts | (dst,opts) <- templates ] ++
