@@ -1,0 +1,62 @@
+diff --color -Nur HGL-3.2.3.1.orig/Graphics/HGL/Internals/Draw.hs HGL-3.2.3.1/Graphics/HGL/Internals/Draw.hs
+--- HGL-3.2.3.1.orig/Graphics/HGL/Internals/Draw.hs	2019-05-09 02:40:51.325924205 +0800
++++ HGL-3.2.3.1/Graphics/HGL/Internals/Draw.hs	2019-05-09 02:41:56.646927458 +0800
+@@ -44,10 +44,6 @@
+ -- | Monad for sequential construction of images.
+ newtype Draw a = MkDraw (DC -> IO a)
+ 
+-instance Applicative Draw where
+-  pure  = return
+-  (<*>) = ap
+-
+ unDraw :: Draw a -> (DC -> IO a)
+ unDraw (MkDraw m) = m
+ 
+diff --color -Nur HGL-3.2.3.1.orig/Graphics/HGL/X11/Display.hs HGL-3.2.3.1/Graphics/HGL/X11/Display.hs
+--- HGL-3.2.3.1.orig/Graphics/HGL/X11/Display.hs	2019-05-09 02:40:51.326924205 +0800
++++ HGL-3.2.3.1/Graphics/HGL/X11/Display.hs	2019-05-09 02:41:19.045925586 +0800
+@@ -14,12 +14,12 @@
+ import Control.Monad (when)
+ import Data.Maybe (isJust)
+ import System.Environment (getEnv)
+-import System.IO.Error (tryIOError,catchIOError)
++import System.IO.Error
+ import System.IO.Unsafe (unsafePerformIO)
+ 
+ getDisplayName :: IO String
+ getDisplayName = do
+-  disp <- tryIOError (getEnv "DISPLAY")
++  disp <- try (getEnv "DISPLAY")
+   return (either (const ":0.0") id disp)
+ 
+ displayRef :: MVar (Maybe X.Display)
+@@ -32,7 +32,7 @@
+   openDisplay'
+  where
+   openDisplay' = do
+-    display <- X.openDisplay host `catchIOError` \ err ->
++    display <- X.openDisplay host `catch` \ err ->
+                  ioError (userError ("Unable to open X display " ++ host))
+     modMVar displayRef (const $ Just display)
+     return display
+diff --color -Nur HGL-3.2.3.1.orig/Graphics/HGL/X11/Types.hs HGL-3.2.3.1/Graphics/HGL/X11/Types.hs
+--- HGL-3.2.3.1.orig/Graphics/HGL/X11/Types.hs	2019-05-09 02:40:51.326924205 +0800
++++ HGL-3.2.3.1/Graphics/HGL/X11/Types.hs	2019-05-09 02:41:38.290926544 +0800
+@@ -28,7 +28,7 @@
+ import qualified Graphics.X11.Xlib as X
+ 
+ 
+-import System.IO.Error (catchIOError)
++import System.IO.Error
+ import Control.Concurrent.MVar (MVar)
+ import Data.Bits
+ import Data.Word (Word8)
+@@ -86,7 +86,7 @@
+   (X.Color p _ _ _ _) <-
+       X.allocColor display color_map (X.Color 0 r g b xcolor_flags)
+   return p)
+-     `catchIOError` \ err ->
++     `catch` \ err ->
+                print err >> return 0
+ --	       ioError (userError ("Error: " ++ show err
+ --			      ++ "\nUnable to allocate colo[u]r " ++ show (r,g,b)
