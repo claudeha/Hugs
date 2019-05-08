@@ -39,4 +39,4 @@ tar xf hsc2hs-$hsc2hs_ver.tar.gz -C hsc2hs --strip-component=1
 rm -rf hsc2hs-$hsc2hs_ver.tar.gz 
 
 #get base 4.0
-cd packages; darcs get -t "6.10 branch has been forked"  http://darcs.haskell.org/packages/base
+cd packages; darcs get -t "6.10 branch has been forked"  http://darcs.haskell.org/packages/base;rm -rf base/_darcs
