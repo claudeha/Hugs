@@ -1,0 +1,12 @@
+--- unix-2.2.0.0/System/Posix/Files.hsc	2007-11-03 22:44:43.000000000 +0800
++++ unix-2.2.0.0.n1/System/Posix/Files.hsc	2019-05-08 22:37:37.154197371 +0800
+@@ -502,6 +502,9 @@
+   withCString name2 $ \s2 ->
+   throwErrnoPathIfMinus1_ "rename" name1 (c_rename s1 s2)
+ 
++foreign import ccall unsafe "rename"
++   c_rename :: CString -> CString -> IO CInt
++
+ -- -----------------------------------------------------------------------------
+ -- chown()
+ 

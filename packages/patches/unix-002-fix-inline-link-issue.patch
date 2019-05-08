@@ -1,0 +1,11 @@
+--- unix-2.2.0.0.orig/include/HsUnix.h	2007-11-03 22:44:43.000000000 +0800
++++ unix-2.2.0.0/include/HsUnix.h	2019-05-08 22:38:39.984200501 +0800
+@@ -94,7 +94,7 @@
+ 
+ #ifndef INLINE
+ # if defined(__GNUC__)
+-#  define INLINE extern inline
++#  define INLINE static inline
+ # else
+ #  define INLINE inline
+ # endif

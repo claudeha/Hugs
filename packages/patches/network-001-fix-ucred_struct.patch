@@ -1,0 +1,46 @@
+--- network-2.2.1.10.orig/configure.ac	2019-05-08 22:42:22.516211583 +0800
++++ network-2.2.1.10/configure.ac	2019-05-08 22:44:12.507217061 +0800
+@@ -30,7 +30,7 @@
+ 
+ dnl ** check for specific header (.h) files that we are interested in
+ AC_CHECK_HEADERS([fcntl.h limits.h stdlib.h sys/types.h unistd.h winsock2.h ws2tcpip.h wspiapi.h])
+-AC_CHECK_HEADERS([arpa/inet.h netdb.h netinet/in.h netinet/tcp.h sys/socket.h sys/uio.h sys/un.h])
++AC_CHECK_HEADERS([arpa/inet.h netdb.h netinet/in.h netinet/tcp.h sys/socket.h sys/uio.h sys/un.h sys/ucred.h])
+ 
+ AC_CHECK_FUNCS([readlink symlink])
+ 
+diff --color -Nur network-2.2.1.10.orig/include/HsNet.h network-2.2.1.10/include/HsNet.h
+--- network-2.2.1.10.orig/include/HsNet.h	2019-05-08 22:42:22.517211583 +0800
++++ network-2.2.1.10/include/HsNet.h	2019-05-08 22:45:49.398221887 +0800
+@@ -105,6 +105,18 @@
+ #endif
+ #endif
+ 
++#ifdef HAVE_SYS_UCRED_H
++#include <sys/ucred.h>
++#else
++#ifndef __USE_GNU
++struct ucred {
++    pid_t pid;    /* process ID of the sending process */
++    uid_t uid;    /* user ID of the sending process */
++    gid_t gid;    /* group ID of the sending process */
++};
++#endif /*__USE_GNU*/
++#endif
++
+ extern int
+ sendFd(int sock, int outfd);
+ 
+diff --color -Nur network-2.2.1.10.orig/include/HsNetworkConfig.h.in network-2.2.1.10/include/HsNetworkConfig.h.in
+--- network-2.2.1.10.orig/include/HsNetworkConfig.h.in	2019-05-08 22:42:22.517211583 +0800
++++ network-2.2.1.10/include/HsNetworkConfig.h.in	2019-05-08 22:43:13.853214140 +0800
+@@ -106,6 +106,9 @@
+ /* Define to 1 if you have the <sys/un.h> header file. */
+ #undef HAVE_SYS_UN_H
+ 
++/* Define to 1 if you have the <sys/ucred.h> header file. */
++#undef HAVE_SYS_UCRED_H
++
+ /* Define to 1 if you have the <unistd.h> header file. */
+ #undef HAVE_UNISTD_H
+ 
