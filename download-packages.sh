@@ -1,5 +1,6 @@
 cpphs_ver=1.11
 hsc2hs_ver=0.67.20061107
+happy_ver=1.18.4
 
 #create dir, just in case.
 mkdir -p packages
@@ -37,6 +38,12 @@ wget http://hackage.haskell.org/package/hsc2hs-$hsc2hs_ver/hsc2hs-$hsc2hs_ver.ta
 mkdir -p hsc2hs
 tar xf hsc2hs-$hsc2hs_ver.tar.gz -C hsc2hs --strip-component=1
 rm -rf hsc2hs-$hsc2hs_ver.tar.gz 
+
+#download and extract happy
+#note, DO NOT delete happy dir, it contains patches and preprocess files.
+wget http://hackage.haskell.org/package/happy-$happy_ver/happy-$happy_ver.tar.gz
+tar xf happy-$happy_ver.tar.gz -C happy --strip-component=1
+rm -rf happy-$happy_ver.tar.gz 
 
 #get base 4.0
 cd packages; darcs get -t "6.10 branch has been forked"  http://darcs.haskell.org/packages/base;rm -rf base/_darcs
