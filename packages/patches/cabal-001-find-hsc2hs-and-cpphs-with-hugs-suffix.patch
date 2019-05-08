@@ -1,0 +1,21 @@
+diff --color -Nur Cabal/Distribution/Simple/Program.hs Cabaln/Distribution/Simple/Program.hs
+--- Cabal/Distribution/Simple/Program.hs	2008-10-12 02:34:33.000000000 +0800
++++ Cabaln/Distribution/Simple/Program.hs	2019-05-08 23:00:34.984265992 +0800
+@@ -664,7 +664,7 @@
+ stripProgram = simpleProgram "strip"
+ 
+ hsc2hsProgram :: Program
+-hsc2hsProgram = (simpleProgram "hsc2hs") {
++hsc2hsProgram = (simpleProgram "hsc2hs-hugs") {
+     programFindVersion =
+       findProgramVersion "--version" $ \str ->
+         -- Invoking "hsc2hs --version" gives a string like "hsc2hs version 0.66"
+@@ -679,7 +679,7 @@
+   }
+ 
+ cpphsProgram :: Program
+-cpphsProgram = (simpleProgram "cpphs") {
++cpphsProgram = (simpleProgram "cpphs-hugs") {
+     programFindVersion = findProgramVersion "--version" $ \str ->
+       -- Invoking "cpphs --version" gives a string like "cpphs 1.3"
+       case words str of
