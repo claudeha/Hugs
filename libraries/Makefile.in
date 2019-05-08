@@ -84,13 +84,13 @@ $(BUILD_DIR)/programs/hsc2hs/Main.hs: $(HSC2HS_SRC)/Main.hs $(BOOTLIB) $(INCLUDE
 $(HAPPY): $(BUILD_DIR)/programs/happy/Main.lhs
 	(echo '#! /bin/sh'; \
 	 echo "rootdir='`cd ..; pwd`'"; \
-	 echo '$$rootdir/src/runhugs -98 -h10M -P$$rootdir/libraries/bootlib $$rootdir/hugsdir/programs/happy/Main.lhs -t$$rootdir/happy "$$@"') >$@
+	 echo '$$rootdir/src/runhugs -98 -h10M "-P$$rootdir/hugsdir/packages/*" $$rootdir/hugsdir/programs/happy/Main.lhs -t$$rootdir/happy "$$@"') >$@
 	chmod 755 $@
 
 $(HAPPY).bat: $(BUILD_DIR)/programs/happy/Main.lhs
 	(echo '@echo off'; \
 	 echo "set rootdir=`cd ..; src/runhugs -Plibraries/bootlib libraries/pwd.hs`"; \
-	 echo '%rootdir%/src/runhugs -98 -h10M -P%rootdir%/libraries/bootlib %rootdir%/hugsdir/programs/happy/Main.lhs -t%rootdir%/happy %*') >$@
+	 echo '%rootdir%/src/runhugs -98 -h10M "-P%rootdir%/hugsdir/packages/*" %rootdir%/hugsdir/programs/happy/Main.lhs -t%rootdir%/happy %*') >$@
 
 
 $(BUILD_DIR)/programs/happy/Main.lhs: $(HAPPY_SRC) $(BOOTLIB) $(INCLUDES) $(CPPHS_FILE)
