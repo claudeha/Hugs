@@ -82,7 +82,7 @@ do
 	package_dir=$source/$package
 
     # don't rely on $topdir/Makefile to run autoreconf on packages.
-    if [ ! -f $package_dir/configure ] && [ -f $$dir/configure.ac ]; then
+    if [ ! -f $package_dir/configure ] && [ -f $package_dir/configure.ac ]; then
         (cd $package_dir; autoreconf)
     fi
 
