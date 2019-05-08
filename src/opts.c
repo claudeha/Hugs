@@ -29,7 +29,7 @@ String  hugsEdit   = 0;	         /* String for editor command       */
 String  prompt     = 0;          /* Prompt string                   */
 
 #if !HASKELL_98_ONLY
-Bool haskell98 = TRUE;		 /* TRUE => Haskell 98 compatibility*/
+Bool haskell98 = FALSE;		 /* TRUE => Haskell 98 compatibility*/
 #endif
 
 #if EXPLAIN_INSTANCE_RESOLUTION
