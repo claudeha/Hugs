@@ -26,6 +26,17 @@ rm -rf packages/*.tar.gz
 #fix perms in case.
 find packages -name configure|xargs chmod +x
 
+#apply patches for packages.
+cat packages/patches/cabal-001-find-hsc2hs-and-cpphs-with-hugs-suffix.patch|patch -p1 -d packages/Cabal
+cat packages/patches/cabal-002-find-happy-with-hugs-suffix.patch|patch -p1 -d packages/Cabal
+cat packages/patches/directory-001-no-depend-on-unix.patch|patch -p1 -d packages/directory
+cat packages/patches/HGL-001-fix-with-new-base.patch|patch -p1 -d packages/HGL
+cat packages/patches/network-001-fix-ucred_struct.patch|patch -p1 -d packages/network
+cat packages/patches/network-002-fix-inline-link-issue.patch|patch -p1 -d packages/network
+cat packages/patches/unix-001-add-c_rename.patch|patch -p1 -d packages/unix
+cat packages/patches/unix-002-fix-inline-link-issue.patch|patch -p1 -d packages/unix
+
+
 
 #download and extract cpphs
 wget http://hackage.haskell.org/package/cpphs-$cpphs_ver/cpphs-$cpphs_ver.tar.gz
@@ -44,6 +55,9 @@ rm -rf hsc2hs-$hsc2hs_ver.tar.gz
 wget http://hackage.haskell.org/package/happy-$happy_ver/happy-$happy_ver.tar.gz
 tar xf happy-$happy_ver.tar.gz -C happy --strip-component=1
 rm -rf happy-$happy_ver.tar.gz 
+
+#apply patch for happy
+cat happy/patches/happy-001-use-cpphs-hugs-to-generate-templates.patch|patch -p1 -d happy
 
 #get base 4.0
 cd packages; darcs get -t "6.10 branch has been forked"  http://darcs.haskell.org/packages/base;rm -rf base/_darcs
