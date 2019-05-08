@@ -136,7 +136,7 @@ src/Makefile: configure
 	LIBS=$(GNULIBS) ./configure $(EXTRA_CONFIGURE_OPTS)
 
 configure: configure.ac aclocal.m4 $(PACKAGES)
-	for dir in packages/*; do if test -f $$dir/configure.ac; \
+	for dir in packages/*; do if [ ! -f $$dir/configure ] && [ -f $$dir/configure.ac ]; \
 		then (cd $$dir; autoreconf); fi; done
 	-autoreconf
 
