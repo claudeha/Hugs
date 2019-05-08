@@ -96,14 +96,7 @@ build_package() {
 	*)	happyflag="--with-happy=$top_dir/$happy" ;;
 	esac
 
-	# HACK: network package expects host settings
-	case "$source_dir" in
-	*/network)
-		extra_opts="--configure-option=--build=$HOST --configure-option=--host=$HOST" ;;
-	*)	extra_opts= ;;
-	esac
-
-        export PATH="$top_dir/src:$PATH"
+	export PATH="$top_dir/src:$PATH"
 
 	$HugsSetup configure --verbose --hugs \
 			--prefix="$PREFIX" \
@@ -112,7 +105,7 @@ build_package() {
 			--with-cpphs="$top_dir/libraries/tools/cpphs$bat" \
 			--with-compiler="$ffihugs" \
 			--with-hugs="$top_dir/src/hugs" \
-			$happyflag $extra_opts
+			$happyflag
 	if $HugsSetup build --verbose; then
 		for name in LICEN[CS]E* COPYING* COPYRIGHT* copyright; do
 			if test -f $name; then
