@@ -54,7 +54,7 @@ $ make && make install
 ```
 
 ## Requirements:
-* darcs (to fetch base-4.0 source code from haskell.org)
+* darcs (only needed when build from git, to fetch base-4.0 source code from haskell.org)
 * gcc/g++/make/autoconf/perl
 * libedit/ncurses with dev package
 * libsigsegv with dev package (optional)
@@ -65,7 +65,7 @@ $ make && make install
 ## Known issues and TODOs:
 * TODO: foreign import wrapper not works on x86_64/arm/aarch64.
   + it wasn't implemented by upstream.
-  + OpenGL/GLUT broken due to this issue.
+  + OpenGL/GLUT on x86_64 broken due to this issue.
 * Only tested with linux.
 * some testcase in bundled 'tests' may broken, the test codes need tweak.
 
