@@ -5,7 +5,7 @@ dnl Process this file with autoreconf to produce a configure script.
 dnl
 dnl--------------------------------------------------------------------
 
-AC_INIT([Hugs98], [1.0], [hugs-bugs@haskell.org], [hugs98])
+AC_INIT([Hugs98], [1.0], [cjacker@gmail.com], [hugs98])
 AC_CONFIG_SRCDIR([src/hugs.c])
 
 dnl We need 2.50 for AC_HELP_STRING.

@@ -120,9 +120,9 @@ String msg; {
 
     Printf("Please report this Hugs bug to ");
 #if HUGS_FOR_WINDOWS
-    WinHugsHyperlink("http://hackage.haskell.org/trac/hugs");
+    WinHugsHyperlink("https://github.com/cjacker/Hugs");
 #else
-    Printf("http://hackage.haskell.org/trac/hugs");
+    Printf("https://github.com/cjacker/Hugs");
 #endif
     Printf("\n");
 

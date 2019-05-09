@@ -196,7 +196,7 @@ static Void printBanner()
     Printf("\n");
     svColor = SetForeColor(BLUE);    Printf("||   ||                    ");
     SetForeColor(svColor);           Printf("     Bugs: ");
-    WinHugsHyperlink("http://hackage.haskell.org/trac/hugs");
+    WinHugsHyperlink("https://github.com/cjacker/Hugs");
     Printf("\n");
     svColor = SetForeColor(RED);     Printf("||   || ");
     SetForeColor(svColor);           Printf("Version: %-14s",versionString);
@@ -207,7 +207,7 @@ static Void printBanner()
     Printf("||   || ||  || ||  || ||__      Hugs 98: Based on the Haskell 98 standard\n");
     Printf("||___|| ||__|| ||__||  __||     Copyright (c) 1994-2019\n");
     Printf("||---||         ___||           World Wide Web: http://haskell.org/hugs\n");
-    Printf("||   ||                         Bugs: http://hackage.haskell.org/trac/hugs\n");
+    Printf("||   ||                         Bugs: https://github.com/cjacker/Hugs\n");
     Printf("||   || Version: %-14s _________________________________________\n\n",versionString);
 #endif
 

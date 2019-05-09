@@ -78,4 +78,4 @@ need to extend the configure script.  The steps are:
    it uses autoheader to generate src/config.h.in
    (You need version 2.13 of autoheader for this -- more recent
    versions don't work.)
-5) Send patches to hugs-bugs@haskell.org (please).
+5) Send patches to https://github.com/cjacker/Hugs (please).
