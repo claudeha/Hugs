@@ -24,7 +24,7 @@ Especially, the installation size is very small comparing to the tremendous ghc.
 
 Here is a fork of the most recent codes with some improvement.
 
-##Improvement comparing to 'Sep2006':
+## Improvement comparing to 'Sep2006':
 * tweak the build system, make it work with recent tools.
 * update haskell base to a decent version; base-4.0
 * update essential utilities, include cabal, cpphs, hsc2hs.
@@ -33,7 +33,7 @@ Here is a fork of the most recent codes with some improvement.
 * ...
 
 
-##build from source:
+## build from source:
 ```console
 $ git clone https://github.com/cjacker/Hugs
 $ cd Hugs
@@ -43,7 +43,7 @@ $ ./configure
 $ make && make install
 ```
 
-##Requirements:
+## Requirements:
 * darcs (to fetch base-4.0 source code from haskell.org)
 * gcc/g++/make/autoconf/perl
 * libedit/ncurses with dev package
@@ -52,7 +52,7 @@ $ make && make install
 * OpenAL/FreeALUT with dev package (optional, to build hackages: OpenAL/ALUT)
 * OpenGL/FreeGLUT with dev package (optional, to build hackages: OpenGL/GLUT)
 
-##Known issues and TODOs:
+## Known issues and TODOs:
 * TODO: foreign import wrapper not works on x86_64/arm/aarch64.
   + it wasn't implemented by upstream.
   + OpenGL/GLUT broken due to this issue.
