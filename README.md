@@ -32,6 +32,16 @@ Here is a fork of the most recent codes with some improvement.
 * Bundle 'happy' parser generator
 * ...
 
+## build from release:
+The release tarball already includes the source codes of haskell base and other packages.
+
+Download: https://github.com/cjacker/Hugs/releases/download/preview/Hugs-May2019.tar.xz
+
+```console
+$ autoreconf
+$ ./configure 
+$ make && make install
+```
 
 ## build from source:
 ```console
