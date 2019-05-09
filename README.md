@@ -1,44 +1,70 @@
+# [Hugs](https://www.haskell.org/hugs/), as a Haskell implementation
+
+```text
 ------------------------------------------------------------------------------
 __   __ __  __  ____   ___      _________________________________________
 ||   || ||  || ||  || ||__      Hugs 98: Based on the Haskell 98 standard
-||___|| ||__|| ||__||  __||     Copyright (c) 1994-2006
+||___|| ||__|| ||__||  __||     Copyright (c) 1994-2019
 ||---||         ___||           World Wide Web: http://haskell.org/hugs
-||   ||                         Report bugs to: hugs-bugs@haskell.org
-||   || Version:    May 2006    _________________________________________
+||   ||                         Bugs: https://github.com/cjacker/Hugs
+||   || Version: 20190509       _________________________________________
 
 ------------------------------------------------------------------------------
+```
 
-   We are pleased to announce a new release of Hugs98, an interpreter
-   and programming environment for developing Haskell programs.
+**Hugs (Haskell User´s Gofer System)** was a popular implementation of the Haskell programming language, and had
+been used in many books, tutorial as a teaching platform.
 
-   In addition to numerous bug fixes, changes since the interim release
-   in March 2005 include:
+The last upstream release was 'Sep2006', and Maintainence was stopped in 2009.
 
-   - The default current module is now the empty module Hugs.
-   - Compatibility libraries are present, but no longer included on the
-     default search path.  They will be removed in the next release.
-   - Rewritten graphical Windows interface (contributed by Neil Mitchell).
+However, it still works quickly and correctly, can be built and installed quickly without administrator privileges,
+and has less complicated error messages than ghc. 
 
-   Further changes since the last major release in November 2003 include:
+Especially, the installation size is very small comparing to the tremendous ghc.
 
-   - The Char type and the Char module now support Unicode as specified
-     in the Haskell 98 Report (contributed by Dmitry Golubovsky).
-   - The new -X option groups several options into one argument.
-   - The syntax of the ffihugs command has changed: the +G and +L options
-     are gone, and a new +i option can be used to specify include files.
-   - Hugs now has basic support for Cabal.
+Here is a fork of the most recent codes with some improvement.
 
-   The home page for Hugs is at http://haskell.org/hugs.
+##Improvement comparing to 'Sep2006':
+* tweak the build system, make it work with recent tools.
+* update haskell base to a decent version; base-4.0
+* update essential utilities, include cabal, cpphs, hsc2hs.
+* update various hackages
+* Bundle 'happy' parser generator
+* ...
 
-   Send email to hugs-users-request@haskell.org to join the hugs-users
-   mailing list.  Bug reports should be sent to hugs-bugs@haskell.org.
-   
-   Send email to hugs-bugs-request@haskell.org to subscribe to the
-   hugs-bugs list.
 
+##build from source:
+```console
+$ git clone https://github.com/cjacker/Hugs
+$ cd Hugs
+$ ./download-packages.sh
+$ autoreconf
+$ ./configure 
+$ make && make install
+```
+
+##Requirements:
+* darcs (to fetch base-4.0 source code from haskell.org)
+* gcc/g++/make/autoconf/perl
+* libedit/ncurses with dev package
+* libsigsegv with dev package (optional)
+* X11 with dev packages (optional, to build hackage: X11)
+* OpenAL/FreeALUT with dev package (optional, to build hackages: OpenAL/ALUT)
+* OpenGL/FreeGLUT with dev package (optional, to build hackages: OpenGL/GLUT)
+
+##Known issues and TODOs:
+* TODO: foreign import wrapper not works on x86_64/arm/aarch64.
+  + it wasn't implemented by upstream.
+  + OpenGL/GLUT broken due to this issue.
+* Only tested with linux.
+* some testcase in bundled 'tests' may broken, the test codes need tweak.
+
+```text
 ------------------------------------------------------------------------------
  The Hugs 98 system is Copyright (c) Mark P Jones, Alastair Reid, the
  Yale Haskell Group, and the OGI School of Science & Engineering at OHSU,
  1994-2005, All rights reserved.  It is distributed as free software under
- the license in the file "License", which is included in the distribution.
+ the license in the file "LICENSE", which is included in the distribution.
 ------------------------------------------------------------------------------
+```
+
