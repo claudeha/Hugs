@@ -2,20 +2,35 @@
 # (`make rpm' takes care of these - you aren't expected to
 # use this spec directly)
 
-Name:          %{name}
-Version:       %{version}
-Release:       %{release}
-License:       BSDish
-Group:         Development/Languages/Haskell
-URL:           http://haskell.org/hugs/
-Source:        %{name}-%{version}.tar.gz
-Packager:      Sven Panne <sven.panne@aedion.de>
-BuildRoot:     %{_tmppath}/%{name}-buildroot
-Provides:      haskell
-PreReq:        update-alternatives
-Requires:      readline
-BuildRequires: update-alternatives
-Summary:       Hugs 98 - A Haskell Interpreter
+Name: %{name}
+Version: %{version}
+Release: %{release}
+License: BSD
+URL: http://haskell.org/hugs/
+Source0: %{name}-%{version}.tar.gz
+Summary: Hugs 98 - A Haskell Interpreter
+
+BuildRequires: gcc,make,autoconf
+BuildRequires: docbook-utils
+BuildRequires: libedit-devel
+
+#for OpenGL/GLUT packages
+BuildRequires: libGL-devel
+BuildRequires: libGLU-devel
+BuildRequires: freeglut-devel
+
+#for OpenAL/ALUT packages
+BuildRequires: openal-devel
+BuildRequires: freealut-devel
+
+#for X11/HGL packages
+BuildRequires: libICE-devel
+BuildRequires: libSM-devel
+BuildRequires: libX11-devel
+BuildRequires: libXi-devel
+BuildRequires: libXmu-devel
+BuildRequires: libXt-devel
+BuildRequires: xorg-x11-proto-devel
 
 %description
 Hugs 98 is a functional programming system based on Haskell 98, the de facto
@@ -45,63 +60,35 @@ almost complete implementation of Haskell 98, including:
   existentials, scoped type variables, and restricted type synonyms.
 
 %prep
-%setup -q
+%setup -q 
+autoreconf
 
 %build
-./configure --prefix=%{_prefix} --mandir=%{_mandir} ${EXTRA_CONFIGURE_OPTS}
+%configure --enable-threads --enable-char-encoding=locale
 make
 
 %install
-rm -rf ${RPM_BUILD_ROOT}
-make DESTDIR=${RPM_BUILD_ROOT} install_all_but_docs
-make -C docs DESTDIR=${RPM_BUILD_ROOT} install_man
+make DESTDIR=%{buildroot} install_all_but_docs
+make -C docs DESTDIR=%{buildroot} install_man
+
+find %{buildroot} -name '*.so' -exec chmod 0755 '{}' ';'
 
 %clean
-rm -rf ${RPM_BUILD_ROOT}
-
-%post
-# Alas, GHC, Hugs and nhc all come with different set of tools in addition to
-# a runFOO:
-#
-#   * GHC:  hsc2hs
-#   * Hugs: hsc2hs, cpphs
-#   * nhc:  cpphs
-#
-# Therefore it is currently not possible to use --slave below to form link
-# groups under a single name 'runhaskell'. Either these tools should be
-# disentangled from the Haskell implementations or all implementations should
-# have the same set of tools. *sigh*
-update-alternatives --install %{_bindir}/runhaskell runhaskell %{_bindir}/runhugs     300
-update-alternatives --install %{_bindir}/hsc2hs     hsc2hs     %{_bindir}/hsc2hs-hugs 300
-update-alternatives --install %{_bindir}/cpphs      cpphs      %{_bindir}/cpphs-hugs  300
-
-%preun
-if test "$1" = 0; then
-  update-alternatives --remove runhaskell %{_bindir}/runhugs
-  update-alternatives --remove hsc2hs     %{_bindir}/hsc2hs-hugs
-  update-alternatives --remove cpphs      %{_bindir}/cpphs-hugs
-fi
+rm -rf %{buildroot}
 
 %files
 %defattr(-,root,root)
-%doc Credits
-%doc License
-%doc Readme
-%doc docs/building
+%doc Credits LICENSE README.md 
 %doc docs/ffi-notes.txt
 %doc docs/libraries-notes.txt
-%doc docs/machugs-notes.txt
 %doc docs/server.html
-%doc docs/server.tex
 %doc docs/users_guide/users_guide
-%{_mandir}/man1/hugs.1.gz
-%{_prefix}/bin/cpphs-hugs
-%{_prefix}/bin/ffihugs
-%{_prefix}/bin/hsc2hs-hugs
 %{_prefix}/bin/hugs
 %{_prefix}/bin/runhugs
-%{_prefix}/lib/hugs/demos
-%{_prefix}/lib/hugs/include
-%{_prefix}/lib/hugs/packages
-%{_prefix}/lib/hugs/programs
-%{_prefix}/share/hsc2hs-0.67/template-hsc.h
+%{_prefix}/bin/ffihugs
+%{_prefix}/bin/cpphs-hugs
+%{_prefix}/bin/hsc2hs-hugs
+%{_prefix}/bin/happy-hugs
+%dir %{_libdir}/hugs
+%{_libdir}/hugs/*
+%{_mandir}/man1/hugs.1.gz
