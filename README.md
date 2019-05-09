@@ -13,14 +13,13 @@ __   __ __  __  ____   ___      _________________________________________
 ```
 
 **Hugs (Haskell User´s Gofer System)** was a popular implementation of the Haskell programming language, and had
-been used in many books, tutorial as a teaching platform.
+been used in many books, tutorials as a teaching platform.
 
 The last upstream release was 'Sep2006', and Maintainence was stopped in 2009.
 
-However, it still works quickly and correctly, can be built and installed quickly without administrator privileges,
-and has less complicated error messages than ghc. 
+However, it still works quickly and correctly, can be built and installed in few minutes, without requirement to admin privileges, and has less complicated error messages than ghc. 
 
-Especially, the installation size is very small comparing to the tremendous ghc.
+Especially, the installation size is very tiny comparing to the tremendous ghc.
 
 Here is a fork of the most recent codes with some improvement.
 
@@ -63,11 +62,12 @@ $ make && make install
 * OpenGL/FreeGLUT with dev package (optional, to build hackages: OpenGL/GLUT)
 
 ## Known issues and TODOs:
-* TODO: foreign import wrapper not works on x86_64/arm/aarch64.
+* **TODO:** foreign import wrapper not works on x86_64/arm/aarch64.
   + it wasn't implemented by upstream.
   + OpenGL/GLUT on x86_64 broken due to this issue.
 * Only tested with linux.
-* some testcase in bundled 'tests' may broken, the test codes need tweak.
+  + codes related to other platform keep untouched, should work but not sure.
+* some testcase in bundled 'tests' may broken, the test codes need more tweak.
 
 ```text
 ------------------------------------------------------------------------------
