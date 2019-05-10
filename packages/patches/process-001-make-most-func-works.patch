@@ -75,7 +75,7 @@ diff --color -Nur process-1.0.1.1.orig/process.cabal process-1.0.1.1/process.cab
 -     cpp-options: -Dbase3
 -  }
 -
-+  hs-source-dirs: src
++  
 +  exposed-modules: 
 +      System.Cmd
 +      System.Process
