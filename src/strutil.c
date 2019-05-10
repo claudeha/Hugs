@@ -37,7 +37,7 @@ Int n; {
 	    ERRMSG(0) "String storage space exhausted"
 	    EEND;
 	}
-	strncpy(t, s, n);
+	memcpy(t, s, n);
 	t[n] = '\0';
 	return t;
     }
