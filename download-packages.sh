@@ -33,6 +33,7 @@ cat packages/patches/directory-001-no-depend-on-unix.patch|patch -p1 -d packages
 cat packages/patches/HGL-001-fix-with-new-base.patch|patch -p1 -d packages/HGL
 cat packages/patches/network-001-fix-ucred_struct.patch|patch -p1 -d packages/network
 cat packages/patches/network-002-fix-inline-link-issue.patch|patch -p1 -d packages/network
+cat packages/patches/process-001-correct-code-for-base4.patch|patch -p1 -d packages/process
 cat packages/patches/unix-001-add-c_rename.patch|patch -p1 -d packages/unix
 cat packages/patches/unix-002-fix-inline-link-issue.patch|patch -p1 -d packages/unix
 
