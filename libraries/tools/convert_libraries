@@ -96,6 +96,8 @@ build_package() {
 		extra_flags="--with-happy=$top_dir/libraries/tools/happy$bat" ;;
 	*/process)
 		extra_flags="--extra-include-dirs=$top_dir/packages/base/include" ;;
+	*/QuickCheck)
+		extra_flags="--flags=\"base4 -base3\"" ;;
 	*)  extra_flags= ;;
 	esac
 
