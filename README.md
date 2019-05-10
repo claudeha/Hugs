@@ -34,7 +34,7 @@ Here is a fork of the most recent codes with some improvement.
 ## build from release tarball:
 The release tarball already includes the source codes of haskell base and other packages.
 
-Download: https://github.com/cjacker/Hugs/releases/download/preview/Hugs-May2019.tar.xz
+Download: https://github.com/cjacker/Hugs/releases/download/goodstart/Hugs-May2019.tar.xz
 
 ```console
 $ autoreconf
