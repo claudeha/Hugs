@@ -1,0 +1,342 @@
+diff --color -Nur process-1.0.1.1.orig/cbits/runProcess.c process-1.0.1.1/cbits/runProcess.c
+--- process-1.0.1.1.orig/cbits/runProcess.c	2019-05-10 12:48:33.574465068 +0800
++++ process-1.0.1.1/cbits/runProcess.c	2019-05-10 12:49:24.702463682 +0800
+@@ -6,28 +6,16 @@
+ 
+ /* XXX This is a nasty hack; should put everything necessary in this package */
+ #include "HsBase.h"
+-#include "Rts.h"
+ 
+ #include "runProcess.h"
+ 
+ #if !(defined(_MSC_VER) || defined(__MINGW32__) || defined(_WIN32))
+ 
+-#include "execvpe.h"
+ 
+ /* ----------------------------------------------------------------------------
+    UNIX versions
+    ------------------------------------------------------------------------- */
+ 
+-static void
+-disableItimers()
+-{
+-#if !defined(USE_TIMER_CREATE)
+-    // we only need to do this if we're using itimers, because
+-    // timer_create timers are not carried across a fork().
+-    stopTimer();
+-#endif
+-}
+-
+ static long max_fd = 0;
+ 
+ ProcHandle
+@@ -72,8 +60,6 @@
+ 	
+     case 0:
+     {
+-        disableItimers();
+-	
+ 	if (workingDirectory) {
+ 	    if (chdir (workingDirectory) < 0) {
+                 // See #1593.  The convention for the exit code when
+diff --color -Nur process-1.0.1.1.orig/process.cabal process-1.0.1.1/process.cabal
+--- process-1.0.1.1.orig/process.cabal	2019-05-10 12:48:33.572465068 +0800
++++ process-1.0.1.1/process.cabal	2019-05-10 12:49:24.702463682 +0800
+@@ -19,35 +19,22 @@
+ flag base4
+ 
+ Library {
+-  exposed-modules: System.Cmd
+-  if !impl(nhc98) {
+-    exposed-modules:
+-        System.Process
+-    if impl(ghc)
+-        exposed-modules:
+-          System.Process.Internals
+-    c-sources:
+-        cbits/runProcess.c
+-    include-dirs: include
+-    includes:
+-        runProcess.h
+-    install-includes:
+-        runProcess.h
+-        HsProcessConfig.h
+-    if !os(windows)
+-        build-depends: unix
+-  }
+-
+-  if (flag(base4)) {
+-     build-depends: base >= 4 && < 5
+-     cpp-options: -Dbase4
+-     -- later, we can use the new MIN_VERSION_base() stuff that
+-     -- arrived in Cabal-1.6.
+-  } else {
+-     build-depends: base >= 3 && < 4
+-     cpp-options: -Dbase3
+-  }
+-
++  hs-source-dirs: src
++  exposed-modules: 
++      System.Cmd
++      System.Process
++      System.Process.Internals
++  c-sources:
++      cbits/runProcess.c
++  include-dirs: include
++  includes:
++      runProcess.h
++  install-includes:
++      runProcess.h
++      HsProcessConfig.h
++  build-depends: unix
++  build-depends: base >= 4 && < 5
++  cpp-options: -Dbase4
+   build-depends: directory >= 1.0 && < 1.1,
+                  filepath  >= 1.1 && < 1.2
+ 
+diff --color -Nur process-1.0.1.1.orig/System/Cmd.hs process-1.0.1.1/System/Cmd.hs
+--- process-1.0.1.1.orig/System/Cmd.hs	2019-05-10 12:48:33.573465068 +0800
++++ process-1.0.1.1/System/Cmd.hs	2019-05-10 12:49:24.703463682 +0800
+@@ -22,11 +22,20 @@
+       rawSystem,     -- :: FilePath -> [String] -> IO ExitCode
+     ) where
+ 
++import Prelude
++import System.Exit  ( ExitCode )
++
+ #ifndef __NHC__
+ import System.Process
+ #else
+ import System
+ 
++#ifdef __HUGS__
++import Hugs.System
++#endif
++
++	
++
+ rawSystem :: String -> [String] -> IO ExitCode
+ rawSystem cmd args = system (unwords (map translate (cmd:args)))
+ 
+diff --color -Nur process-1.0.1.1.orig/System/Process/Internals.hs process-1.0.1.1/System/Process/Internals.hs
+--- process-1.0.1.1.orig/System/Process/Internals.hs	2019-05-10 12:48:33.573465068 +0800
++++ process-1.0.1.1/System/Process/Internals.hs	2019-05-10 12:49:24.703463682 +0800
+@@ -19,15 +19,12 @@
+ 
+ -- #hide
+ module System.Process.Internals (
+-#ifndef __HUGS__
+ 	ProcessHandle(..), ProcessHandle__(..), 
+ 	PHANDLE, closePHANDLE, mkProcessHandle, 
+ 	withProcessHandle, withProcessHandle_,
+-#ifdef __GLASGOW_HASKELL__
+         CreateProcess(..),
+         CmdSpec(..), StdStream(..),
+ 	runGenProcess_,
+-#endif
+ #if !defined(mingw32_HOST_OS) && !defined(__MINGW32__)
+ 	 pPrPr_disableITimers, c_execvpe,
+ 	ignoreSignal, defaultSignal,
+@@ -36,7 +33,6 @@
+ 	translate,
+ # endif
+ #endif
+-#endif
+ 	withFilePathException, withCEnvironment,
+ 
+ #ifndef __HUGS__
+@@ -44,7 +40,6 @@
+ #endif
+   ) where
+ 
+-#ifndef __HUGS__
+ #if !defined(mingw32_HOST_OS) && !defined(__MINGW32__)
+ import System.Posix.Types ( CPid )
+ import System.Posix.Process.Internals ( pPrPr_disableITimers, c_execvpe )
+@@ -53,7 +48,6 @@
+ import Data.Word ( Word32 )
+ import Data.IORef
+ #endif
+-#endif
+ 
+ import System.IO 	( Handle )
+ import System.Exit	( ExitCode )
+@@ -68,6 +62,10 @@
+ import GHC.Handle
+ # elif __HUGS__
+ import Hugs.Exception	( IOException(..) )
++import Hugs.IO
++import Hugs.IOExts
++import Hugs.IORef
++import System.IO.Unsafe ( unsafeInterleaveIO )
+ # endif
+ 
+ #if defined(mingw32_HOST_OS)
+@@ -80,12 +78,12 @@
+ #endif
+ 
+ #ifdef __HUGS__
+-{-# CFILES cbits/execvpe.c  #-}
++{-# CFILES cbits/runProcess.c  #-}
+ #endif
+ 
+ #include "HsProcessConfig.h"
+ 
+-#ifndef __HUGS__
++type FD = CInt
+ -- ----------------------------------------------------------------------------
+ -- ProcessHandle type
+ 
+@@ -151,7 +149,6 @@
+ 	:: PHANDLE
+ 	-> IO ()
+ #endif
+-#endif /* !__HUGS__ */
+ 
+ -- ----------------------------------------------------------------------------
+ 
+@@ -185,7 +182,6 @@
+ 
+ #if !defined(mingw32_HOST_OS) && !defined(__MINGW32__)
+ 
+-#ifdef __GLASGOW_HASKELL__
+ 
+ -- -----------------------------------------------------------------------------
+ -- POSIX runProcess with signal handling in the child
+@@ -254,7 +250,6 @@
+         -> CInt                         -- close_fds
+         -> IO PHANDLE
+ 
+-#endif /* __GLASGOW_HASKELL__ */
+ 
+ ignoreSignal, defaultSignal :: CLong
+ ignoreSignal  = CONST_SIG_IGN
+@@ -262,7 +257,6 @@
+ 
+ #else
+ 
+-#ifdef __GLASGOW_HASKELL__
+ 
+ runGenProcess_ fun CreateProcess{ cmdspec = cmdsp,
+                                   cwd = mb_cwd,
+@@ -380,7 +374,6 @@
+ 	-- rest of the string is a sequence of backslashes followed by
+ 	-- a double quote.
+ 
+-#endif /* __GLASGOW_HASKELL__ */
+ 
+ #endif
+ 
+@@ -391,7 +384,7 @@
+ 
+ mbFd :: String -> FD -> StdStream -> IO FD
+ mbFd _fun std Inherit         = return std
+-mbFd fun _std (UseHandle hdl) = withHandle_ fun hdl $ return . haFD
++--mbFd fun _std (UseHandle hdl) = withHandle_ fun hdl $ return . haFD
+ mbFd _   _std CreatePipe      = return (-1)
+ 
+ mbPipe :: StdStream -> Ptr FD -> IOMode -> IO (Maybe Handle)
+@@ -401,11 +394,8 @@
+ pfdToHandle :: Ptr FD -> IOMode -> IO Handle
+ pfdToHandle pfd mode = do
+   fd <- peek pfd
+-  fdToHandle' fd (Just Stream)
+-     False{-Windows: not a socket,  Unix: don't set non-blocking-}
+-     ("fd:" ++ show fd) mode True{-binary-}
++  openFd (fromIntegral fd) False mode True
+ 
+-#ifndef __HUGS__
+ -- ----------------------------------------------------------------------------
+ -- commandToProcess
+ 
+@@ -492,7 +482,6 @@
+       Just cmd -> return cmd
+ #endif
+ 
+-#endif /* __HUGS__ */
+ 
+ -- ----------------------------------------------------------------------------
+ -- Utils
+diff --color -Nur process-1.0.1.1.orig/System/Process.hs process-1.0.1.1/System/Process.hs
+--- process-1.0.1.1.orig/System/Process.hs	2019-05-10 12:48:33.572465068 +0800
++++ process-1.0.1.1/System/Process.hs	2019-05-10 12:49:50.167462992 +0800
+@@ -30,7 +30,6 @@
+ -}
+ 
+ module System.Process (
+-#ifndef __HUGS__
+ 	-- * Running sub-processes
+         createProcess,
+         shell, proc,
+@@ -46,21 +45,17 @@
+ 	runInteractiveProcess,
+         readProcess,
+         readProcessWithExitCode,
+-#endif
+         system,
+         rawSystem,
+ 
+-#ifndef __HUGS__
+ 	-- * Process completion
+ 	waitForProcess,
+ 	getProcessExitCode,
+ 	terminateProcess,
+-#endif
+  ) where
+ 
+ import Prelude hiding (mapM)
+ 
+-#ifndef __HUGS__
+ import System.Process.Internals
+ 
+ import System.IO.Error
+@@ -71,7 +66,6 @@
+ import Foreign.C
+ import System.IO
+ import Data.Maybe
+-#endif
+ import System.Exit	( ExitCode(..) )
+ 
+ #ifdef __GLASGOW_HASKELL__
+@@ -90,8 +84,10 @@
+ import System (system)
+ #endif
+ 
++#ifdef __HUGS__
++{-# CFILES cbits/runProcess.c  #-}
++#endif
+ 
+-#ifndef __HUGS__
+ -- ----------------------------------------------------------------------------
+ -- runCommand
+ 
+@@ -371,7 +367,7 @@
+     case ex of
+      ExitSuccess   -> return output
+      ExitFailure r -> 
+-      ioError (mkIOError OtherError ("readProcess: " ++ cmd ++ 
++      ioError (mkIOError userErrorType ("readProcess: " ++ cmd ++ 
+                                      ' ':unwords (map show args) ++ 
+                                      " (exit " ++ show r ++ ")")
+                                  Nothing Nothing)
+@@ -422,7 +418,6 @@
+     ex <- waitForProcess pid
+ 
+     return (ex, out, err)
+-#endif /* !__HUGS__ */
+ 
+ -- ---------------------------------------------------------------------------
+ -- system
+@@ -511,7 +506,6 @@
+ 	escape c    (b,     str) = (False, c : str)
+ #endif
+ 
+-#ifndef __HUGS__
+ -- ----------------------------------------------------------------------------
+ -- terminateProcess
+ 
+@@ -587,4 +581,3 @@
+   c_waitForProcess
+ 	:: PHANDLE
+ 	-> IO CInt
+-#endif /* !__HUGS__ */
