@@ -18,8 +18,8 @@
 
 static Void linkInternals Args((Void));
 
-static Name nameLeft;			/* standard data constructors      */
-static Name nameRight;			
+static Name nameLeft_;			/* standard data constructors      */
+static Name nameRight_;			
 
 static Void local internalControl Args((Int));
 static Void local internalControl(what)
@@ -28,8 +28,8 @@ Int what; {
 	case INSTALL : 
 #define predef(nm,str) nm=newName(findText(str),NIL); name(nm).defn=PREDEFINED
 		       setCurrModule(modulePrelude);
-		       predef(nameLeft,       "Left");
-		       predef(nameRight,      "Right");
+		       predef(nameLeft_,       "Left");
+		       predef(nameRight_,      "Right");
 #undef predef
 		       break;
 
@@ -191,9 +191,9 @@ primFun(primCatchError2) {	       /* Error catching  primitive        */
     Cell err = NIL;
     err = evalWithNoError(primArg(1)); 
     if (isNull(err)) {
-	updapRoot(nameRight, primArg(1));
+	updapRoot(nameRight_, primArg(1));
     } else {
-	updapRoot(nameLeft, ap(HUGSOBJECT, err));
+	updapRoot(nameLeft_, ap(HUGSOBJECT, err));
     }
 }
 
