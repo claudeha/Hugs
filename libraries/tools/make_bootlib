@@ -3,7 +3,7 @@
 # Create libraries sufficient for runhugs, ffihugs, cpphs, hsc2hs, happy and
 # Cabal scripts.
 
-boot_packages='array base Cabal containers directory filepath haskell98 old-locale old-time pretty unix process random mtl'
+boot_packages='array base Cabal containers directory filepath haskell98 old-locale old-time pretty process random mtl'
 
 # ensure that letter ranges work
 LC_ALL=C
@@ -168,13 +168,13 @@ $ffihugs '-i"HsDirectory.h"' System.Directory $directory_includes \
 case $platform in
 Unix)
 	$ffihugs '-i"HsBase.h"' System.Posix.Internals $base_includes
-	$ffihugs '-i"HsUnix.h"' '-i"execvpe.h"' '-i"HsUnixConfig.h"' System.Posix.Process.Internals \
-		$unix_includes \
-		$source/unix/cbits/HsUnix.c $source/unix/cbits/execvpe.c
-	$ffihugs '-i"runProcess.h"' System.Process.Internals $process_includes $base_includes \
-		$source/process/cbits/runProcess.c
-	$ffihugs '-i"runProcess.h"' System.Process $process_includes $base_includes \
-		$source/process/cbits/runProcess.c
+	#$ffihugs '-i"HsUnix.h"' '-i"execvpe.h"' '-i"HsUnixConfig.h"' System.Posix.Process.Internals \
+	#	$unix_includes \
+	#	$source/unix/cbits/HsUnix.c $source/unix/cbits/execvpe.c
+	#$ffihugs '-i"runProcess.h"' System.Process.Internals $process_includes $base_includes \
+	#	$source/process/cbits/runProcess.c
+	#$ffihugs '-i"runProcess.h"' System.Process $process_includes $base_includes \
+	#	$source/process/cbits/runProcess.c
 	;;
 Win32)
 	$ffihugs Distribution.Simple.Utils

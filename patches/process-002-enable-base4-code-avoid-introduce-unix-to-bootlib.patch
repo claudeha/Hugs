@@ -1,0 +1,15 @@
+diff --color -Nur process/System/Process/Internals.hs processn/System/Process/Internals.hs
+--- process/System/Process/Internals.hs	2019-05-10 21:22:40.000000000 +0800
++++ processn/System/Process/Internals.hs	2019-05-10 22:26:35.003599611 +0800
+@@ -489,11 +489,7 @@
+ withFilePathException :: FilePath -> IO a -> IO a
+ withFilePathException fpath act = handle mapEx act
+   where
+-#ifdef base4
+     mapEx (IOError h iot fun str _) = ioError (IOError h iot fun str (Just fpath))
+-#else
+-    mapEx (IOException (IOError h iot fun str _)) = ioError (IOError h iot fun str (Just fpath))
+-#endif
+ 
+ #if !defined(mingw32_HOST_OS) && !defined(__MINGW32__)
+ withCEnvironment :: [(String,String)] -> (Ptr CString  -> IO a) -> IO a

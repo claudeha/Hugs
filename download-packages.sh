@@ -81,6 +81,7 @@ cat patches/HGL-001-fix-with-new-base.patch|patch -p1 -d packages/HGL
 cat patches/network-001-fix-ucred_struct.patch|patch -p1 -d packages/network
 cat patches/network-002-fix-inline-link-issue.patch|patch -p1 -d packages/network
 cat patches/process-001-make-most-func-works.patch|patch -p1 -d packages/process
+cat patches/process-002-enable-base4-code-avoid-introduce-unix-to-bootlib.patch|patch -p1 -d packages/process
 cat patches/unix-001-add-c_rename.patch|patch -p1 -d packages/unix
 cat patches/unix-002-fix-inline-link-issue.patch|patch -p1 -d packages/unix
 
