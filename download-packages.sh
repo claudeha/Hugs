@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "here"
+#keep silent
 downloader="wget -q"
 
 #verify_file_with_md5 <file> <md5sum>
