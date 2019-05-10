@@ -66,7 +66,6 @@ $ make && make install
   + it wasn't implemented by upstream.
   + OpenGL/GLUT on x86_64 broken due to this issue.
 * Only tested with linux.
-  + codes related to other platform keep untouched, should work but not sure.
 * some testcase in bundled 'tests' may broken, the test codes need more tweak.
 
 ```text
