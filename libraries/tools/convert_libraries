@@ -91,11 +91,23 @@ build_package() {
 	HugsSetup="$runhugs -98 $setup_script"
 
 	# Setup extra flags for packages.
+
+	# HACK: 'process' can NOT built to 'packages' dir direcly!
+	# runhugs/cabal depend on 'process' pkg installed in 'packages' dir
+	# to work properly.
+	# when a cabal pkg building, it will build hs first, then
+	# build the related ffi libs.
+	# if directly built to 'packages' dir, after 'hs' generated,
+	# it will break cabal immediately, since ffi libs not get built.
+	
+	# here, build it to packages.stage2, and move to packages after all packages built.
+ 
 	case "$source_dir" in
 	*/haskell-src)
 		extra_flags="--with-happy=$top_dir/libraries/tools/happy$bat" ;;
 	*/process)
-		extra_flags="--extra-include-dirs=$top_dir/packages/base/include" ;;
+		extra_flags="--extra-include-dirs=$top_dir/packages/base/include"
+		target_dir="$target/packages.stage2/$pkg" ;;
 	*/QuickCheck)
 		extra_flags="--flags=-base3 --flags=base4" ;;
 	*)  extra_flags= ;;
@@ -139,3 +151,12 @@ do
 		build_package $lib_src/$package
 	fi
 done
+
+#move 'process' from packages.stage2 to packages.
+if [ -f "$target/packages.stage2/process/System/Process/Internals.so" ];
+then
+	mkdir -p $target/packages.bootlib
+	rm -rf $target/packages.bootlib/process
+	mv $target/packages/process $target/packages.bootlib/
+	mv $target/packages.stage2/process $target/packages/process 
+fi 
