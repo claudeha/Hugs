@@ -63,3 +63,4 @@ cat happy/patches/happy-001-use-cpphs-hugs-to-generate-templates.patch|patch -p1
 #get base 4.0
 cd packages; darcs get -t "6.10 branch has been forked"  http://darcs.haskell.org/packages/base;rm -rf base/_darcs;cd ..
 cat packages/patches/base-001-check-gettimeofday.patch|patch -p1 -d packages/base
+cat packages/patches/base-002-fix-upstream-mistake.patch|patch -p1 -d packages/base

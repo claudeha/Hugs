@@ -1,0 +1,14 @@
+diff --color -Nur base/Foreign/Concurrent.hs basen/Foreign/Concurrent.hs
+--- base/Foreign/Concurrent.hs	2019-05-10 13:47:42.000000000 +0800
++++ basen/Foreign/Concurrent.hs	2019-05-10 15:05:16.155991334 +0800
+@@ -23,8 +23,10 @@
+         -- thread, cf. /Destructors, Finalizers and Synchronization/,
+         -- by Hans Boehm, /POPL/, 2003.
+ 
++#ifdef __GLASGOW_HASKELL__
+         newForeignPtr,
+         addForeignPtrFinalizer,
++#endif
+   ) where
+ 
+ #ifdef __GLASGOW_HASKELL__
