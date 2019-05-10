@@ -90,11 +90,13 @@ build_package() {
 	fi
 	HugsSetup="$runhugs -98 $setup_script"
 
-	# HACK: only haskell-src need happy to build
+	# Setup extra flags for packages.
 	case "$source_dir" in
 	*/haskell-src)
-		happyflag="--with-happy=$top_dir/libraries/tools/happy$bat" ;;
-	*)  happyflag= ;;
+		extra_flags="--with-happy=$top_dir/libraries/tools/happy$bat" ;;
+	*/process)
+		extra_flags="--extra-include-dirs=$top_dir/packages/base/include" ;;
+	*)  extra_flags= ;;
 	esac
 
 	export PATH="$top_dir/src:$PATH"
@@ -106,7 +108,7 @@ build_package() {
 			--with-cpphs="$top_dir/libraries/tools/cpphs$bat" \
 			--with-compiler="$ffihugs" \
 			--with-hugs="$top_dir/src/hugs" \
-			$happyflag
+			$extra_flags
 
 	if $HugsSetup build --verbose; then
 		for name in LICEN[CS]E* COPYING* COPYRIGHT* copyright; do
