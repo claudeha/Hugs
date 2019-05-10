@@ -1,4 +1,4 @@
-# [Hugs](https://www.haskell.org/hugs/), as a Haskell implementation
+# [Hugs](https://www.haskell.org/hugs/), a Haskell implementation
 
 ```text
 ------------------------------------------------------------------------------
@@ -24,14 +24,14 @@ Especially, the installation size is very tiny comparing to the tremendous ghc.
 Here is a fork of the most recent codes with some improvement.
 
 ## Improvement comparing to 'Sep2006':
-* tweak the build system, make it work with recent tools.
-* update haskell base to a decent version; base-4.0
+* bugfixes.
+* update haskell base to a decent version: base-4.0
 * update essential utilities, include cabal, cpphs, hsc2hs.
-* update various hackages
+* update various packages
 * Bundle 'happy' parser generator
 * ...
 
-## build from release:
+## build from release tarball:
 The release tarball already includes the source codes of haskell base and other packages.
 
 Download: https://github.com/cjacker/Hugs/releases/download/preview/Hugs-May2019.tar.xz
@@ -53,9 +53,9 @@ $ make && make install
 ```
 
 ## Requirements:
-* darcs (only needed when build from git, to fetch base-4.0 source code from haskell.org)
 * gcc/g++/make/autoconf/perl
 * libedit/ncurses with dev package
+* darcs (only needed when build from git, to fetch base-4.0 source code from haskell.org)
 * libsigsegv with dev package (optional)
 * X11 with dev packages (optional, to build hackage: X11)
 * OpenAL/FreeALUT with dev package (optional, to build hackages: OpenAL/ALUT)
@@ -63,10 +63,9 @@ $ make && make install
 
 ## Known issues and TODOs:
 * **TODO:** foreign import wrapper not works on x86_64/arm/aarch64.
-  + it wasn't implemented by upstream.
-  + OpenGL/GLUT on x86_64 broken due to this issue.
+  + Upstream didn't implement for x86_64/arm.
+  + OpenGL/GLUT on x86_64 can not work properly due to this issue.
 * Only tested with linux.
-* some testcase in bundled 'tests' may broken, the test codes need more tweak.
 
 ```text
 ------------------------------------------------------------------------------
