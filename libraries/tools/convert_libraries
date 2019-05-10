@@ -163,5 +163,6 @@ fi
 
 if [ -d "$target/packages/hscolour/programs/HsColour" ];
 then
-	mv $target/packages/hscolour/programs/HsColour $target/program
+	mv $target/packages/hscolour/programs/HsColour $target/programs
+    rm -rf $target/packages/hscolour/programs
 fi

@@ -197,10 +197,11 @@ install: all
 	(echo '#! /bin/sh'; \
 	 echo 'runhugs -98 -h10M $(hugsdir)/programs/happy/Main.lhs -t$(hugsdir)/programs/happy/template "$$@"') >$(DESTDIR)$(bindir)/happy-hugs
 	chmod 755 $(DESTDIR)$(bindir)/happy-hugs 
-	if [ -d $(BUILD_DIR)/programs/HsColour ]; then
+	if [ -d $(BUILD_DIR)/programs/HsColour ]; then \
 		(echo '#! /bin/sh'; \
-		 echo 'runhugs -98 $(hugsdir)/programs/HsColour/Main.hs "$$@"') >$(DESTDIR)$(bindir)/hscolour-hugs
+		 echo 'runhugs -98 $(hugsdir)/programs/HsColour/Main.hs "$$@"') >$(DESTDIR)$(bindir)/hscolour-hugs; \
 	fi
+	chmod 755 $(DESTDIR)$(bindir)/hscolour-hugs
 
 LibStatus: $(LIBS)
 	tools/test_libraries ../packages >$@

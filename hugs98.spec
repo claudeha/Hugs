@@ -89,6 +89,7 @@ rm -rf %{buildroot}
 %{_prefix}/bin/cpphs-hugs
 %{_prefix}/bin/hsc2hs-hugs
 %{_prefix}/bin/happy-hugs
+%{_prefix}/bin/hsclour-hugs
 %dir %{_libdir}/hugs
 %{_libdir}/hugs/*
 %{_mandir}/man1/hugs.1.gz
