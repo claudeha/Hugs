@@ -1,0 +1,10 @@
+--- base/configure.ac	2019-05-10 13:05:18.506437832 +0800
++++ basen/configure.ac	2019-05-10 13:09:31.979430962 +0800
+@@ -34,6 +34,7 @@
+ AC_CHECK_FUNCS([lstat readdir_r])
+ AC_CHECK_FUNCS([getclock getrusage times])
+ AC_CHECK_FUNCS([_chsize ftruncate])
++AC_CHECK_FUNCS([gettimeofday])
+ 
+ # map standard C types and ISO types to Haskell types
+ FPTOOLS_CHECK_HTYPE(char)
