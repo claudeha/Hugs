@@ -97,7 +97,7 @@ build_package() {
 	*/process)
 		extra_flags="--extra-include-dirs=$top_dir/packages/base/include" ;;
 	*/QuickCheck)
-		extra_flags="--flags=\"base4 -base3\"" ;;
+		extra_flags="--flags=-base3 --flags=base4" ;;
 	*)  extra_flags= ;;
 	esac
 
