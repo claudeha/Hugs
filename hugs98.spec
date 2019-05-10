@@ -1,13 +1,12 @@
-# Requires %defines of `name', `version' and `release'.
-# (`make rpm' takes care of these - you aren't expected to
-# use this spec directly)
+Name: hugs
+Version:
+Release:
 
-Name: %{name}
-Version: %{version}
-Release: %{release}
 License: BSD
+
 URL: http://haskell.org/hugs/
 Source0: %{name}-%{version}.tar.gz
+
 Summary: Hugs 98 - A Haskell Interpreter
 
 BuildRequires: gcc,make,autoconf
@@ -73,12 +72,17 @@ make -C docs DESTDIR=%{buildroot} install_man
 
 find %{buildroot} -name '*.so' -exec chmod 0755 '{}' ';'
 
+%check
+pushd tests
+sh ./testScript
+popd
+
 %clean
 rm -rf %{buildroot}
 
 %files
-%defattr(-,root,root)
-%doc Credits LICENSE README.md 
+%license LICENSE
+%doc Credits README.md 
 %doc docs/ffi-notes.txt
 %doc docs/libraries-notes.txt
 %doc docs/server.html
