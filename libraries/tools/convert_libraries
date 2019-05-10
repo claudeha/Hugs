@@ -86,7 +86,7 @@ build_package() {
 	elif test -f Setup.hs
 	then	cp Setup.hs $setup_dir
 		setup_script=$setup_dir/Setup.hs
-	else	setup_script=$top_dir/packages/Cabal/examples/hapax.hs
+	else	setup_script=$top_dir/cabal/cabal.hs
 	fi
 	HugsSetup="$runhugs -98 $setup_script"
 
