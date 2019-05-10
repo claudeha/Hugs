@@ -117,7 +117,7 @@ do
 		target_stem=$target/$package/$modname
 		dstdir=`dirname $target_stem`
 		basename=`basename $stem`
-		cpp_flags="$CPPFLAGS -I$HUGSDIR/include -I$package_dir/include -Dbase4"
+		cpp_flags="$CPPFLAGS -I$HUGSDIR/include -I$package_dir/include -D__HUGS_BOOTLIB__"
 
 		mkdir -p $dstdir
 

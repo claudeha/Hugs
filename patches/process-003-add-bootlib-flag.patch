@@ -1,0 +1,21 @@
+diff --color -Nur process/System/Cmd.hs processn/System/Cmd.hs
+--- process/System/Cmd.hs	2019-05-10 22:30:56.000000000 +0800
++++ processn/System/Cmd.hs	2019-05-10 23:44:11.304516226 +0800
+@@ -25,16 +25,10 @@
+ import Prelude
+ import System.Exit  ( ExitCode )
+ 
+-#ifndef __NHC__
++#ifndef __HUGS_BOOTLIB__
+ import System.Process
+ #else
+-import System
+-
+-#ifdef __HUGS__
+ import Hugs.System
+-#endif
+-
+-	
+ 
+ rawSystem :: String -> [String] -> IO ExitCode
+ rawSystem cmd args = system (unwords (map translate (cmd:args)))
