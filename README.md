@@ -45,12 +45,18 @@ $ make && make install
 
 ## Build from source:
 ```console
+## Build
 $ git clone https://github.com/cjacker/Hugs
 $ cd Hugs
 $ ./download-packages.sh
 $ autoreconf
 $ ./configure 
-$ make && make install
+$ make
+
+
+## Install
+$ make install_all_but_docs
+$ make install_man -C docs
 ```
 
 ## Requirements:
