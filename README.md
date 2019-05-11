@@ -63,9 +63,8 @@ $ make && make install
 * OpenGL/FreeGLUT with dev package (optional, to build hackages: OpenGL/GLUT)
 
 ## Known issues and TODOs:
-* ~~**DONE:** foreign import wrapper not works on x86_64/arm/aarch64.~~
-  ~~+ Upstream didn't implement for x86_64/arm.~~
-  ~~+ OpenGL/GLUT on x86_64 can not work properly due to this issue.~~
+* ~~**DONE:** foreign import wrapper support for x86_64. Upstream didn't implement it~~
+* **TODO:** foreign import wrapper support for arm/aarch64, Upstream didn't implement it.
 * Only tested under linux. Other platform may work but unsure.
 
 ```text
