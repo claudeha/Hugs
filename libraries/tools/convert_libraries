@@ -108,6 +108,10 @@ build_package() {
 	*/process)
 		extra_flags="--extra-include-dirs=$top_dir/packages/base/include"
 		target_dir="$target/packages.stage2/$pkg" ;;
+	*/directory)
+		extra_flags="--extra-include-dirs=$top_dir/src" ;;
+	*/base)
+		extra_flags="--extra-include-dirs=$top_dir/src" ;;
 	*/QuickCheck)
 		extra_flags="--flags=-base3 --flags=base4" ;;
 	*)  extra_flags= ;;
