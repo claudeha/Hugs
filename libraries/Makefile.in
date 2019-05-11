@@ -195,24 +195,24 @@ install: all
 	 $(INSTALL) -d "$(DESTDIR)$(hugsdir)/programs/happy/template"; \
 	 cp -r ../happy/HappyTemplate* "$(DESTDIR)$(hugsdir)/programs/happy/template/"; \
 	 cp -r ../happy/GLR_* "$(DESTDIR)$(hugsdir)/programs/happy/template/"; \
-	 rm -rf "$(DESTDIR)$(hugsdir)/programs/happy/template/*.bak"
+	 rm -rf $(DESTDIR)$(hugsdir)/programs/happy/template/*.bak
 	(echo '#! /bin/sh'; \
 	 echo 'runhugs -98 -h10M $(hugsdir)/programs/happy/Main.lhs -t$(hugsdir)/programs/happy/template "$$@"') >$(DESTDIR)$(bindir)/happy-hugs
 	chmod 755 $(DESTDIR)$(bindir)/happy-hugs 
 	if [ -d $(BUILD_DIR)/programs/HsColour ]; then \
 		(echo '#! /bin/sh'; \
 		 echo 'runhugs -98 $(hugsdir)/programs/HsColour/Main.hs "$$@"') >$(DESTDIR)$(bindir)/hscolour-hugs; \
+		chmod 755 $(DESTDIR)$(bindir)/hscolour-hugs; \
 	fi
-	chmod 755 $(DESTDIR)$(bindir)/hscolour-hugs
 	$(INSTALL) -d "$(DESTDIR)$(hugsdir)/programs/alex"; \
 	 $(INSTALL) -d "$(DESTDIR)$(hugsdir)/programs/alex/template"; \
 	 cp -r ../packages/alex/Alex* "$(DESTDIR)$(hugsdir)/programs/alex/template/"; \
-	 rm -rf "$(DESTDIR)$(hugsdir)/programs/alex/template/*.bak"
+	 rm -rf $(DESTDIR)$(hugsdir)/programs/alex/template/*.bak
 	if [ -d $(BUILD_DIR)/programs/alex ]; then \
 		(echo '#! /bin/sh'; \
-		 echo 'runhugs -98 $(hugsdir)/programs/alex/Main.hs -t$(hugsdir)/programs/alex/template "$$@"') >$(DESTDIR)$(bindir)/alex-hugs; \
+		 echo 'runhugs -98 -h10M $(hugsdir)/programs/alex/Main.hs -t$(hugsdir)/programs/alex/template "$$@"') >$(DESTDIR)$(bindir)/alex-hugs; \
+		chmod 755 $(DESTDIR)$(bindir)/alex-hugs; \
 	fi
-	chmod 755 $(DESTDIR)$(bindir)/alex-hugs
 
 LibStatus: $(LIBS)
 	tools/test_libraries ../packages >$@
