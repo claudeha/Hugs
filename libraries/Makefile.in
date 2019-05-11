@@ -204,6 +204,15 @@ install: all
 		 echo 'runhugs -98 $(hugsdir)/programs/HsColour/Main.hs "$$@"') >$(DESTDIR)$(bindir)/hscolour-hugs; \
 	fi
 	chmod 755 $(DESTDIR)$(bindir)/hscolour-hugs
+	$(INSTALL) -d "$(DESTDIR)$(hugsdir)/programs/alex"; \
+	 $(INSTALL) -d "$(DESTDIR)$(hugsdir)/programs/alex/template"; \
+	 cp -r ../packages/alex/Alex* "$(DESTDIR)$(hugsdir)/programs/alex/template/"; \
+	 rm -rf "$(DESTDIR)$(hugsdir)/programs/alex/template/*.bak"
+	if [ -d $(BUILD_DIR)/programs/alex ]; then \
+		(echo '#! /bin/sh'; \
+		 echo 'runhugs -98 $(hugsdir)/programs/alex/Main.hs -t$(hugsdir)/programs/alex/template "$$@"') >$(DESTDIR)$(bindir)/alex-hugs; \
+	fi
+	chmod 755 $(DESTDIR)$(bindir)/alex-hugs
 
 LibStatus: $(LIBS)
 	tools/test_libraries ../packages >$@
