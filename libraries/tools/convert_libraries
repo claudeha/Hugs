@@ -145,7 +145,7 @@ Win32=
 case `uname -a` in
 CYGWIN*|MINGW32*) Win32="Win32" ;;
 esac
-packages="base array old-locale old-time directory unix process random haskell98 filepath pretty containers Cabal bytestring haskell-src QuickCheck mtl fgl HaXml parsec html network HUnit $Win32 X11 HGL OpenGL GLUT OpenAL ALUT time stm xhtml regex-base regex-posix regex-compat regex-tdfa hscolour FiniteMap alex"
+packages="base array old-locale old-time directory unix process random haskell98 filepath pretty containers Cabal bytestring haskell-src QuickCheck mtl fgl parsec html network HUnit $Win32 X11 HGL OpenGL GLUT OpenAL ALUT time stm xhtml regex-base regex-posix regex-compat regex-tdfa polyparse HaXml hscolour FiniteMap alex"
 
 build_package libraries/hugsbase
 
@@ -164,6 +164,12 @@ then
 	mv $target/packages/process $target/packages.bootlib/
 	mv $target/packages.stage2/process $target/packages/process 
 fi 
+
+if [ -d "$target/packages/HaXml/programs" ];
+then
+	mv $target/packages/HaXml/programs/* $target/programs
+    rm -rf $target/packages/HaXml/programs
+fi
 
 if [ -d "$target/packages/hscolour/programs/HsColour" ];
 then

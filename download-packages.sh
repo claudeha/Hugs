@@ -86,6 +86,7 @@ cat patches/process-002-enable-base4-code-avoid-introduce-unix-to-bootlib.patch|
 cat patches/process-003-add-bootlib-flag.patch|patch -p1 -d packages/process
 cat patches/unix-001-add-c_rename.patch|patch -p1 -d packages/unix
 cat patches/unix-002-fix-inline-link-issue.patch|patch -p1 -d packages/unix
+cat patches/haxml-001-fix-hugs.patch|patch -p1 -d packages/HaXml
 
 #prepare alex sources.
 cat patches/alex-001-use-cpphs-instead-ghc.patch|patch -p1 -d packages/alex
