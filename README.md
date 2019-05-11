@@ -58,6 +58,13 @@ $ make
 $ make install_all_but_docs
 $ make install_man -C docs
 ```
+## Note of building with clang
+```console
+## Building hugs with clang, need to set env as below:
+$ export CC=clang
+$ export CXX=clang++
+$ export cpp="clang -E -Wno-invalid-pp-token -traditional-cpp -Wno-unicode -Wno-trigraphs"
+```
 
 ## Requirements:
 * gcc/g++/make/autoconf/perl
