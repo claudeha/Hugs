@@ -1,0 +1,150 @@
+diff --color -Nur array.orig/Data/Array/Base.hs array/Data/Array/Base.hs
+--- array.orig/Data/Array/Base.hs	2019-05-11 17:54:03.714591280 +0800
++++ array/Data/Array/Base.hs	2019-05-11 17:56:11.721588988 +0800
+@@ -211,8 +211,7 @@
+ 
+ {-# RULES
+ "listArray/Array" listArray =
+-    \lu es -> runST (listArrayST lu es >>= ArrST.unsafeFreezeSTArray)
+-    #-}
++    \lu es -> runST (listArrayST lu es >>= ArrST.unsafeFreezeSTArray) #-}
+ 
+ {-# INLINE listUArrayST #-}
+ listUArrayST :: (MArray (STUArray s) e (ST s), Ix i)
+@@ -283,8 +282,7 @@
+ "listArray/UArray/Word32"    listArray
+    = (\lu es -> runST (listUArrayST lu es >>= unsafeFreezeSTUArray)) :: ListUArray Word32
+ "listArray/UArray/Word64"    listArray
+-   = (\lu es -> runST (listUArrayST lu es >>= unsafeFreezeSTUArray)) :: ListUArray Word64
+-    #-}
++   = (\lu es -> runST (listUArrayST lu es >>= unsafeFreezeSTUArray)) :: ListUArray Word64 #-}
+ #endif
+ 
+ {-# INLINE (!) #-}
+@@ -517,8 +515,7 @@
+ 
+ {-# SPECIALISE 
+     showsIArray :: (IArray UArray e, Ix i, Show i, Show e) => 
+-		   Int -> UArray i e -> ShowS
+-  #-}
++		   Int -> UArray i e -> ShowS  #-}
+ 
+ showsIArray :: (IArray a e, Ix i, Show i, Show e) => Int -> a i e -> ShowS
+ showsIArray p a =
+@@ -1721,8 +1718,7 @@
+ 
+ {-# RULES
+ "freeze/STArray"  freeze = ArrST.freezeSTArray
+-"freeze/STUArray" freeze = freezeSTUArray
+-    #-}
++"freeze/STUArray" freeze = freezeSTUArray  #-}
+ #endif /* __GLASGOW_HASKELL__ */
+ 
+ -- In-place conversion of mutable arrays to immutable ones places
+@@ -1763,8 +1759,7 @@
+ 
+ {-# RULES
+ "unsafeFreeze/STArray"  unsafeFreeze = ArrST.unsafeFreezeSTArray
+-"unsafeFreeze/STUArray" unsafeFreeze = unsafeFreezeSTUArray
+-    #-}
++"unsafeFreeze/STUArray" unsafeFreeze = unsafeFreezeSTUArray  #-}
+ 
+ -----------------------------------------------------------------------------
+ -- Thawing
+@@ -1796,8 +1791,7 @@
+ 
+ {-# RULES
+ "thaw/STArray"  thaw = ArrST.thawSTArray
+-"thaw/STUArray" thaw = thawSTUArray
+-    #-}
++"thaw/STUArray" thaw = thawSTUArray  #-}
+ #elif __HUGS__
+ thawSTUArray (UArray l u n arr) = do
+     marr <- thawByteArray arr
+@@ -1854,8 +1848,7 @@
+ 
+ {-# RULES
+ "unsafeThaw/STArray"    unsafeThaw = ArrST.unsafeThawSTArray
+-"unsafeThaw/STUArray"   unsafeThaw = unsafeThawSTUArray
+-    #-}
++"unsafeThaw/STUArray"   unsafeThaw = unsafeThawSTUArray  #-}
+ 
+ {-# INLINE unsafeThawIOArray #-}
+ unsafeThawIOArray :: Ix ix => Arr.Array ix e -> IO (IOArray ix e)
+@@ -1864,8 +1857,7 @@
+     return (IOArray marr)
+ 
+ {-# RULES
+-"unsafeThaw/IOArray"  unsafeThaw = unsafeThawIOArray
+-    #-}
++"unsafeThaw/IOArray"  unsafeThaw = unsafeThawIOArray  #-}
+ 
+ thawIOArray :: Ix ix => Arr.Array ix e -> IO (IOArray ix e)
+ thawIOArray arr = stToIO $ do
+@@ -1873,23 +1865,20 @@
+     return (IOArray marr)
+ 
+ {-# RULES
+-"thaw/IOArray"  thaw = thawIOArray
+-    #-}
++"thaw/IOArray"  thaw = thawIOArray  #-}
+ 
+ freezeIOArray :: Ix ix => IOArray ix e -> IO (Arr.Array ix e)
+ freezeIOArray (IOArray marr) = stToIO (ArrST.freezeSTArray marr)
+ 
+ {-# RULES
+-"freeze/IOArray"  freeze = freezeIOArray
+-    #-}
++"freeze/IOArray"  freeze = freezeIOArray  #-}
+ 
+ {-# INLINE unsafeFreezeIOArray #-}
+ unsafeFreezeIOArray :: Ix ix => IOArray ix e -> IO (Arr.Array ix e)
+ unsafeFreezeIOArray (IOArray marr) = stToIO (ArrST.unsafeFreezeSTArray marr)
+ 
+ {-# RULES
+-"unsafeFreeze/IOArray"  unsafeFreeze = unsafeFreezeIOArray
+-    #-}
++"unsafeFreeze/IOArray"  unsafeFreeze = unsafeFreezeIOArray  #-}
+ #endif /* __GLASGOW_HASKELL__ */
+ 
+ -- | Casts an 'STUArray' with one element type into one with a
+diff --color -Nur array.orig/Data/Array/Diff.hs array/Data/Array/Diff.hs
+--- array.orig/Data/Array/Diff.hs	2019-05-11 17:54:03.714591280 +0800
++++ array/Data/Array/Diff.hs	2019-05-11 17:56:36.787588539 +0800
+@@ -397,8 +397,7 @@
+   return (DiffArray var)
+ 
+ {-# RULES
+-"freeze/DiffArray" freeze = freezeDiffArray
+-    #-}
++"freeze/DiffArray" freeze = freezeDiffArray  #-}
+ 
+ -- unsafeFreezeDiffArray is really unsafe. Better don't use the old
+ -- array at all after freezing. The contents of the source array will
+@@ -412,8 +411,7 @@
+     return (DiffArray var)
+ 
+ {-# RULES
+-"unsafeFreeze/DiffArray" unsafeFreeze = unsafeFreezeDiffArray
+-    #-}
++"unsafeFreeze/DiffArray" unsafeFreeze = unsafeFreezeDiffArray  #-}
+ 
+ thawDiffArray :: (MArray a e IO, Ix ix)
+               => IOToDiffArray a ix e
+@@ -432,8 +430,7 @@
+             return a''
+ 
+ {-# RULES
+-"thaw/DiffArray" thaw = thawDiffArray
+-    #-}
++"thaw/DiffArray" thaw = thawDiffArray  #-}
+ 
+ -- unsafeThawDiffArray is really unsafe. Better don't use the old
+ -- array at all after thawing. The contents of the resulting array
+@@ -452,5 +449,4 @@
+             return a''
+ 
+ {-# RULES
+-"unsafeThaw/DiffArray" unsafeThaw = unsafeThawDiffArray
+-    #-}
++"unsafeThaw/DiffArray" unsafeThaw = unsafeThawDiffArray  #-}

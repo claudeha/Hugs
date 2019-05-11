@@ -74,6 +74,7 @@ done <packages.list
 find packages -name configure|xargs chmod +x
 
 #apply patches for packages.
+cat patches/array-001-fix-clang-preprocess.patch|patch -p1 -d packages/array
 cat patches/cabal-001-find-hsc2hs-and-cpphs-with-hugs-suffix.patch|patch -p1 -d packages/Cabal
 cat patches/cabal-002-find-happy-with-hugs-suffix.patch|patch -p1 -d packages/Cabal
 cat patches/directory-001-no-depend-on-unix.patch|patch -p1 -d packages/directory
@@ -162,3 +163,4 @@ popd >/dev/null
 
 cat patches/base-001-check-gettimeofday.patch|patch -p1 -d packages/base
 cat patches/base-002-fix-upstream-mistake.patch|patch -p1 -d packages/base
+cat patches/base-003-fix-clang-preprocess.patch|patch -p1 -d packages/base
