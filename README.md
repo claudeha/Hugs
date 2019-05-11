@@ -15,7 +15,7 @@ __   __ __  __  ____   ___      _________________________________________
 **Hugs (Haskell User´s Gofer System)** was a popular implementation of the Haskell programming language, and had
 been used in many books, tutorials as a teaching platform.
 
-The last upstream release was 'Sep2006', and Maintainence was stopped in 2009.
+The last upstream release was 'Sep2006', and Maintainence was stopped in 2009 .
 
 However, it still works quickly and correctly, can be built and installed in few minutes, without requirement to admin privileges, and has less complicated error messages than ghc. 
 
@@ -24,14 +24,15 @@ Especially, the installation size is very tiny comparing to the tremendous ghc.
 Here is a fork of the most recent codes with some improvement.
 
 ## Improvement comparing to 'Sep2006':
-* bugfixes.
-* update haskell base to a decent version: base-4.0
-* update essential utilities, include cabal, cpphs, hsc2hs.
-* update various packages
-* Bundle 'happy' parser generator
+* Implement **Foreigh Import Wrapper for X86_64**, (OpenGL/GLUT works finally)
+* Update haskell base to a decent version: **base-4.0**
+* Update essential utilities, include cabal, cpphs, hsc2hs.
+* Update various packages
+* Bundle **'happy'** parser generator
+* Bugfixes
 * ...
 
-## build from release tarball:
+## Build from release tarball:
 The release tarball already includes the source codes of haskell base and other packages.
 
 Download: https://github.com/cjacker/Hugs/releases/download/goodstart/Hugs-May2019.tar.xz
@@ -42,7 +43,7 @@ $ ./configure
 $ make && make install
 ```
 
-## build from source:
+## Build from source:
 ```console
 $ git clone https://github.com/cjacker/Hugs
 $ cd Hugs
@@ -62,10 +63,10 @@ $ make && make install
 * OpenGL/FreeGLUT with dev package (optional, to build hackages: OpenGL/GLUT)
 
 ## Known issues and TODOs:
-* **TODO:** foreign import wrapper not works on x86_64/arm/aarch64.
-  + Upstream didn't implement for x86_64/arm.
-  + OpenGL/GLUT on x86_64 can not work properly due to this issue.
-* Only tested with linux.
+* ~~**DONE:** foreign import wrapper not works on x86_64/arm/aarch64.~~
+  ~~+ Upstream didn't implement for x86_64/arm.~~
+  ~~+ OpenGL/GLUT on x86_64 can not work properly due to this issue.~~
+* Only tested under linux. Other platform may work but unsure.
 
 ```text
 ------------------------------------------------------------------------------
