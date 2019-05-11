@@ -1945,6 +1945,8 @@ struct thunk_data {
     HugsStablePtr      stable;
 #if i386_HOST_ARCH
     char               code[17];
+#elif x86_64_HOST_ARCH && defined(__GNUC__)
+    char               code[64]; //0x40, 0x30 = 48
 #elif powerpc_HOST_ARCH && defined(__GNUC__)
     char               code[13*sizeof(unsigned long)];
 #elif sparc_HOST_ARCH && defined(__GNUC__)
@@ -1986,6 +1988,19 @@ static struct thunk_data* foreignThunks = 0;
 */
 static unsigned char *obscure_ccall_ret_code;	/* set by initAdjustor() */
 #endif /* i386_HOST_ARCH */
+
+#if x86_64_HOST_ARCH
+static void __attribute__((__used__)) obscure_ccall_wrapper(void)
+{
+  __asm__ (
+   ".globl " "obscure_ccall_ret_code\n"
+   "obscure_ccall_ret_code:\n\t"
+   "addq $0x8, %rsp\n\t"
+   "ret"
+  );
+}
+extern void obscure_ccall_ret_code(void);
+#endif
 
 /* Heavily arch-specific, I'm afraid.. */
 
@@ -2067,6 +2082,102 @@ static void* mkThunk(void (*app)(void), HugsStablePtr s) {
 	adj_code[15] = (char)0xff;	/* jmp *%eax */
 	adj_code[16] = (char)0xe0;
     }
+#elif x86_64_HOST_ARCH && defined(__GNUC__)
+    /*
+      stack at call:
+               argn
+           ...
+           arg7
+               return address
+           %rdi,%rsi,%rdx,%rcx,%r8,%r9 = arg0..arg6
+
+      if there are <6 integer args, then we can just push the
+      StablePtr into %edi and shuffle the other args up.
+
+      If there are >=6 integer args, then we have to flush one arg
+      to the stack, and arrange to adjust the stack ptr on return.
+      The stack will be rearranged to this:
+
+             argn
+         ...
+         arg7
+         return address  *** <-- dummy arg in stub fn.
+         arg6
+         obscure_ccall_ret_code
+
+      This unfortunately means that the type of the stub function
+      must have a dummy argument for the original return address
+      pointer inserted just after the 6th integer argument.
+      Code for the simple case:
+
+   0:   4d 89 c1                mov    %r8,%r9
+   3:   49 89 c8                mov    %rcx,%r8
+   6:   48 89 d1                mov    %rdx,%rcx
+   9:   48 89 f2                mov    %rsi,%rdx
+   c:   48 89 fe                mov    %rdi,%rsi
+   f:   48 8b 3d 0a 00 00 00    mov    10(%rip),%rdi
+  16:   ff 25 0c 00 00 00       jmpq   *12(%rip)
+  ...
+  20: .quad 0  # aligned on 8-byte boundary
+  28: .quad 0  # aligned on 8-byte boundary
+
+
+  And the version for >=6 integer arguments:
+
+   0:   41 51                   push   %r9
+   2:   ff 35 20 00 00 00       pushq  32(%rip)        # 28 <ccall_adjustor+0x28>
+   8:   4d 89 c1                mov    %r8,%r9
+   b:   49 89 c8                mov    %rcx,%r8
+   e:   48 89 d1                mov    %rdx,%rcx
+  11:   48 89 f2                mov    %rsi,%rdx
+  14:   48 89 fe                mov    %rdi,%rsi
+  17:   48 8b 3d 12 00 00 00    mov    18(%rip),%rdi        # 30 <ccall_adjustor+0x30>
+  1e:   ff 25 14 00 00 00       jmpq   *20(%rip)        # 38 <ccall_adjustor+0x38>
+  ...
+  28: .quad 0  # aligned on 8-byte boundary
+  30: .quad 0  # aligned on 8-byte boundary
+  38: .quad 0  # aligned on 8-byte boundary
+    */
+	{
+#if 0
+	int i = 0;
+	char *c;
+	
+	// determine whether we have 6 or more integer arguments,
+	// and therefore need to flush one to the stack.
+	for (c = typeString; *c != '\0'; c++) {
+	    if (*c == 'i' || *c == 'l') i++;
+	    if (i == 6) break;
+	}
+	if (i < 6) {
+	unsigned char *adj_code = (unsigned char*)thunk->code;
+	*(signed int *)adj_code        = 0x49c1894d;
+	*(signed int *)(adj_code+0x4)  = 0x8948c889;
+	*(signed int *)(adj_code+0x8)  = 0xf28948d1;
+	*(signed int *)(adj_code+0xc)  = 0x48fe8948;
+	*(signed int *)(adj_code+0x10) = 0x000a3d8b;
+	*(signed int *)(adj_code+0x14) = 0x25ff0000;
+	*(signed int *)(adj_code+0x18) = 0x0000000c;
+	*(signed long long int *)(adj_code+0x20) = (signed long long int )s;
+	*(signed long long int *)(adj_code+0x28) = (signed long long int )app;
+	}
+#endif
+	unsigned char *adj_code = (unsigned char*)thunk->code;
+	
+	*(signed int *)adj_code        = 0x35ff5141;
+	*(signed int *)(adj_code+0x4)  = 0x00000020;
+	*(signed int *)(adj_code+0x8)  = 0x49c1894d;
+	*(signed int *)(adj_code+0xc)  = 0x8948c889;
+	*(signed int *)(adj_code+0x10) = 0xf28948d1;
+	*(signed int *)(adj_code+0x14) = 0x48fe8948;
+	*(signed int *)(adj_code+0x18) = 0x00123d8b;
+	*(signed int *)(adj_code+0x1c) = 0x25ff0000;
+	*(signed int *)(adj_code+0x20) = 0x00000014;
+	
+	*(signed long long *)(adj_code+0x28) = (signed long long)obscure_ccall_ret_code;
+	*(signed long long *)(adj_code+0x30) = (signed long long)s;
+	*(signed long long *)(adj_code+0x38) = (signed long long)app;
+	}
 #elif powerpc_HOST_ARCH && defined(__GNUC__)
      /* This is only for MacOS X.
       * It does not work on MacOS 9 because of the very strange
