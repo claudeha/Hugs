@@ -1,0 +1,62 @@
+diff --color -Nur GLUT-2.1.2.2.orig/Graphics/UI/GLUT/Callbacks/Window.hs GLUT-2.1.2.2/Graphics/UI/GLUT/Callbacks/Window.hs
+--- GLUT-2.1.2.2.orig/Graphics/UI/GLUT/Callbacks/Window.hs	2019-05-14 11:44:38.746642772 +0800
++++ GLUT-2.1.2.2/Graphics/UI/GLUT/Callbacks/Window.hs	2019-05-14 11:48:12.801637955 +0800
+@@ -67,6 +67,8 @@
+    glut_KEY_F12, glut_KEY_LEFT, glut_KEY_UP, glut_KEY_RIGHT, glut_KEY_DOWN,
+    glut_KEY_PAGE_UP, glut_KEY_PAGE_DOWN, glut_KEY_HOME, glut_KEY_END,
+    glut_KEY_INSERT, glut_KEY_NUM_LOCK, glut_KEY_BEGIN, glut_KEY_DELETE,
++   glut_KEY_SHIFT_L, glut_KEY_SHIFT_R,glut_KEY_CTRL_L, glut_KEY_CTRL_R,
++   glut_KEY_ALT_L, glut_KEY_ALT_R,
+    glut_DOWN, glut_UP,
+    glut_ACTIVE_SHIFT, glut_ACTIVE_CTRL, glut_ACTIVE_ALT,
+    glut_LEFT, glut_ENTERED,
+@@ -388,6 +390,15 @@
+    | KeyNumLock
+    | KeyBegin
+    | KeyDelete
++   | KeyShiftL
++   | KeyShiftR
++   | KeyCtrlL
++   | KeyCtrlR
++   | KeyAltL
++   | KeyAltR
++   | KeyUnknown Int -- ^ You should actually never encounter this value, it is
++                    -- just here as a safeguard against future changes in the
++                    -- native GLUT library.
+    deriving ( Eq, Ord, Show )
+ 
+ unmarshalSpecialKey :: CInt -> SpecialKey
+@@ -416,7 +427,13 @@
+    | x == glut_KEY_NUM_LOCK = KeyNumLock
+    | x == glut_KEY_BEGIN = KeyBegin
+    | x == glut_KEY_DELETE = KeyDelete
+-   | otherwise = error ("unmarshalSpecialKey: illegal value " ++ show x)
++   | x == glut_KEY_SHIFT_L = KeyShiftL
++   | x == glut_KEY_SHIFT_R = KeyShiftR
++   | x == glut_KEY_CTRL_L = KeyCtrlL
++   | x == glut_KEY_CTRL_R = KeyCtrlR
++   | x == glut_KEY_ALT_L = KeyAltL
++   | x == glut_KEY_ALT_R = KeyAltR
++   | otherwise = KeyUnknown (fromIntegral x)
+ 
+ --------------------------------------------------------------------------------
+ 
+diff --color -Nur GLUT-2.1.2.2.orig/Graphics/UI/GLUT/Constants.hs GLUT-2.1.2.2/Graphics/UI/GLUT/Constants.hs
+--- GLUT-2.1.2.2.orig/Graphics/UI/GLUT/Constants.hs	2019-05-14 11:44:38.747642772 +0800
++++ GLUT-2.1.2.2/Graphics/UI/GLUT/Constants.hs	2019-05-14 11:50:04.574635440 +0800
+@@ -95,6 +95,15 @@
+ glut_KEY_BEGIN                         = 110
+ glut_KEY_DELETE                        = 111
+ 
++-- * Modifier Keys
++glut_KEY_SHIFT_L, glut_KEY_SHIFT_R, glut_KEY_CTRL_L, glut_KEY_CTRL_R, glut_KEY_ALT_L, glut_KEY_ALT_R :: CInt
++glut_KEY_SHIFT_L = 0x0070
++glut_KEY_SHIFT_R = 0x0071
++glut_KEY_CTRL_L = 0x0072
++glut_KEY_CTRL_R = 0x0073
++glut_KEY_ALT_L = 0x0074
++glut_KEY_ALT_R = 0x0075
++
+ -----------------------------------------------------------------------------
+ -- * Entry\/exit state
+ glut_LEFT, glut_ENTERED :: CInt

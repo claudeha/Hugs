@@ -87,6 +87,7 @@ cat patches/process-003-add-bootlib-flag.patch|patch -p1 -d packages/process
 cat patches/unix-001-add-c_rename.patch|patch -p1 -d packages/unix
 cat patches/unix-002-fix-inline-link-issue.patch|patch -p1 -d packages/unix
 cat patches/haxml-001-fix-hugs.patch|patch -p1 -d packages/HaXml
+cat patches/GLUT-001-add-modifier-key.patch|patch -p1 -d packages/GLUT
 
 #prepare alex sources.
 cat patches/alex-001-use-cpphs-instead-ghc.patch|patch -p1 -d packages/alex
