@@ -149,6 +149,9 @@ download_tool "cpphs" $cpphs_ver $cpphs_md5
 download_tool "hsc2hs" $hsc2hs_ver $hsc2hs_md5
 download_tool "happy" $happy_ver $happy_md5
 
+#apply patch for hsc2hs
+cat patches/hsc2hs-001-add-alignment-feature.patch|patch -p1 -d hsc2hs
+
 #apply patch for happy
 cat patches/happy-001-use-cpphs-hugs-to-generate-templates.patch|patch -p1 -d happy
 cp patches/happy/*.hs happy/src/
