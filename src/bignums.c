@@ -114,7 +114,7 @@ Int n; {
 	unsigned long no;
 	Cell nx;
 	if (n<0) {
-	    no = (unsigned long)(-n);
+	    no = (unsigned long)(-(signed long)n);
 	    bn = pair(NEGNUM,NIL);
 	}
 	else {
