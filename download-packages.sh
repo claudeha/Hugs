@@ -177,6 +177,7 @@ popd >/dev/null
 cat patches/base-001-check-gettimeofday.patch|patch -p1 -d packages/base
 cat patches/base-002-fix-upstream-mistake.patch|patch -p1 -d packages/base
 cat patches/base-003-fix-clang-preprocess.patch|patch -p1 -d packages/base
+cat patches/base-004-utf8-to-ascii.patch|patch -p1 -d packages/base
 
 find */ -name config.sub -exec cp config.sub '{}' \;
 find */ -name config.guess -exec cp config.guess '{}' \;
