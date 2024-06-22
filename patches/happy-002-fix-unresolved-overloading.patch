@@ -1,0 +1,24 @@
+--- happy/src/Main.lhs	2009-04-23 14:29:06.000000000 +0100
++++ happyn/src/Main.lhs	2024-06-22 15:16:25.611738292 +0100
+@@ -485,18 +485,21 @@
+ 
+ CPP is turned on for -fglasgow-exts, so we can use conditional compilation:
+ 
++> import_glaexts :: String
+ > import_glaexts = "#if __GLASGOW_HASKELL__ >= 503\n" ++
+ > 		   "import qualified GHC.Exts as Happy_GHC_Exts\n" ++
+ >		   "#else\n" ++
+ >		   "import qualified GlaExts as Happy_GHC_Exts\n" ++
+ >		   "#endif\n"
+ 
++> import_array :: String
+ > import_array = "#if __GLASGOW_HASKELL__ >= 503\n" ++
+ > 		 "import qualified Data.Array as Happy_Data_Array\n" ++
+ >		 "#else\n" ++
+ >		 "import qualified Array as Happy_Data_Array\n" ++
+ >		 "#endif\n"
+ 
++> import_debug :: String
+ > import_debug = "#if __GLASGOW_HASKELL__ >= 503\n" ++
+ > 		 "import qualified System.IO as Happy_System_IO\n" ++
+ > 		 "import qualified System.IO.Unsafe as Happy_System_IO_Unsafe\n" ++

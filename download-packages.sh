@@ -154,6 +154,7 @@ cat patches/hsc2hs-001-add-alignment-feature.patch|patch -p1 -d hsc2hs
 
 #apply patch for happy
 cat patches/happy-001-use-cpphs-hugs-to-generate-templates.patch|patch -p1 -d happy
+cat patches/happy-002-fix-unresolved-overloading.patch|patch -p1 -d happy
 cp patches/happy/*.hs happy/src/
 
 #get base 4.0
