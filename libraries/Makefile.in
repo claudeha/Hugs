@@ -73,7 +73,7 @@ $(HSC2HS): $(BUILD_DIR)/programs/hsc2hs/Main.hs
 
 $(HSC2HS).bat: $(BUILD_DIR)/programs/hsc2hs/Main.hs
 	(echo '@echo off'; \
-	 echo "set rootdir=`cd ..; src/runhugs '-Phugsdir/packages/*' libraries/pwd.hs`"; \
+	 echo "set rootdir=`cd ..; src/runhugs -98 '-Phugsdir/packages/*' libraries/pwd.hs`"; \
 	 echo '%rootdir%/src/runhugs -98 "-P%rootdir%/hugsdir/packages/*" %rootdir%/hugsdir/programs/hsc2hs/Main.hs -I%rootdir%/hugsdir/include -t%rootdir%/hsc2hs/template-hsc.h %*') >$@
 
 $(BUILD_DIR)/programs/hsc2hs/Main.hs: $(HSC2HS_SRC)/Main.hs $(BOOTLIB) $(INCLUDES) $(CPPHS_FILE)
@@ -84,13 +84,13 @@ $(BUILD_DIR)/programs/hsc2hs/Main.hs: $(HSC2HS_SRC)/Main.hs $(BOOTLIB) $(INCLUDE
 $(CPPHS): $(BUILD_DIR)/programs/cpphs/Main.hs
 	(echo '#! /bin/sh'; \
 	 echo "rootdir='`cd ..; pwd`'"; \
-	 echo '$$rootdir/src/runhugs "-P$$rootdir/hugsdir/packages/*" $$rootdir/hugsdir/programs/cpphs/Main.hs "$$@"') >$@
+	 echo '$$rootdir/src/runhugs -98 "-P$$rootdir/hugsdir/packages/*" $$rootdir/hugsdir/programs/cpphs/Main.hs "$$@"') >$@
 	chmod 755 $@
 
 $(CPPHS).bat: $(BUILD_DIR)/programs/cpphs/Main.hs
 	(echo '@echo off'; \
-	 echo "set rootdir=`cd ..; src/runhugs '-Phugsdir/packages/*' libraries/pwd.hs`"; \
-	 echo '%rootdir%/src/runhugs '-P%rootdir%/hugsdir/packages/*' %rootdir%/hugsdir/programs/cpphs/Main.hs %*') >$@
+	 echo "set rootdir=`cd ..; src/runhugs -98 '-Phugsdir/packages/*' libraries/pwd.hs`"; \
+	 echo '%rootdir%/src/runhugs -98 '-P%rootdir%/hugsdir/packages/*' %rootdir%/hugsdir/programs/cpphs/Main.hs %*') >$@
 
 $(BUILD_DIR)/programs/cpphs/Main.hs: $(BOOTLIB) $(INCLUDES)
 	cd $(CPPHS_SRC); $(HUGS_SETUP) configure --verbose --hugs --prefix='$(prefix)' --scratchdir='$(BUILD_DIR)/packages/cpphs' --with-compiler=../src/ffihugs --with-hugs=../src/hugs
@@ -109,7 +109,7 @@ $(HAPPY): $(BUILD_DIR)/programs/happy/Main.lhs
 
 $(HAPPY).bat: $(BUILD_DIR)/programs/happy/Main.lhs
 	(echo '@echo off'; \
-	 echo "set rootdir=`cd ..; src/runhugs -Plibraries/bootlib libraries/pwd.hs`"; \
+	 echo "set rootdir=`cd ..; src/runhugs -98 -Plibraries/bootlib libraries/pwd.hs`"; \
 	 echo '%rootdir%/src/runhugs -98 -h10M "-P%rootdir%/hugsdir/packages/*" %rootdir%/hugsdir/programs/happy/Main.lhs -t%rootdir%/happy %*') >$@
 
 
@@ -184,7 +184,7 @@ install: all
 		done
 	$(INSTALL) -d $(DESTDIR)$(bindir)
 	(echo '#! /bin/sh'; \
-	 echo 'runhugs $(hugsdir)/programs/cpphs/Main.hs "$$@"') >$(DESTDIR)$(bindir)/cpphs-hugs
+	 echo 'runhugs -98 $(hugsdir)/programs/cpphs/Main.hs "$$@"') >$(DESTDIR)$(bindir)/cpphs-hugs
 	chmod 755 $(DESTDIR)$(bindir)/cpphs-hugs
 # install template file
 	$(INSTALL) -c -m 0644 ../hsc2hs/template-hsc.h "$(DESTDIR)$(hugsdir)/programs/hsc2hs/template-hsc.h"
