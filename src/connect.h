@@ -43,11 +43,13 @@ extern Name  namePmInteger;
 #if NPLUSK
 extern Name  namePmNpk,	  namePmSub;	/* primitives for (n+k) patterns   */
 #endif
+extern Name  namePmString;              /* OverloadedStrings matching      */
 extern Name  nameBlackHole;		/* For GC-detected black hole	   */
 extern Name  nameInd;			/* For dict indirection		   */
 extern Name  nameAnd,	  nameOr;	/* For optimisation of && and ||   */
 extern Name  nameFromInt, nameFromDouble;/*coercion of numerics		   */
 extern Name  nameFromInteger;
+extern Name  nameFromString;            /* OverloadedStrings               */
 extern Name  nameEq,	  nameCompare;	/* names used for deriving	   */
 extern Name  nameMinBnd,  nameMaxBnd;
 extern Name  nameIndex,	  nameInRange;
@@ -213,6 +215,8 @@ extern Class classRealFloat;
 extern Class classFractional;
 extern Class classFloating;
 extern Class classNum;
+
+extern Class classIsString;             /* OverloadedStrings               */
 
 extern Cell  *CStackBase;		/* pointer to base of C stack	   */
 

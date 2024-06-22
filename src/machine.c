@@ -982,6 +982,13 @@ Label  f, d; {
 			  make(arg(fun(discr)),co,SHOULDNTFAIL,RUNON);
 			  asCELL(namePmFlt);
 		      }
+		      /* OverloadedStrings */
+		      else if (h==nameFromString) {
+			  asSTRING(strOf(arg(discr)));
+			  make(arg(fun(discr)),co,SHOULDNTFAIL,RUNON);
+			  asCELL(namePmString);
+		      }
+		      else internal("makeNumcase");
 		      asMKAP(3);
 		      asEVAL();
 		      asTEST(nameTrue,f);

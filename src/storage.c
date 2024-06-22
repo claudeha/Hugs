@@ -2768,6 +2768,17 @@ Int n; {
 	   : pair(INTCELL,n);
 }
 
+
+Bool isStr(c)
+Cell c; {
+    return isPair(c) && fst(c)==STRCELL;
+}
+Text strOf(c)
+Cell c; {
+    if (isStr(c)) return snd(c);
+    internal("strOf");
+}
+
 #if UNICODE_CHARS
 
 /* --------------------------------------------------------------------------

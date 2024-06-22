@@ -122,6 +122,7 @@ Name namePmInteger;
 #if NPLUSK
 Name namePmNpk,   namePmSub;            /* primitives for (n+k) patterns   */
 #endif
+Name namePmString;                      /* OverloadedStrings matching      */
 #if TREX
 Name nameRecExt,  nameRecBrk;           /* Extend and break a record       */
 Name nameRecSel,  nameRecShw;           /* Select and show a record        */
@@ -2595,6 +2596,7 @@ Int what; {
 		       predef(namePmNpk,        "primPmNpk");
 		       predef(namePmSub,        "primPmSub");
 #endif
+		       predef(namePmString,     "primPmString"); /* OverloadedStrings */
 		       predef(nameRationalToDouble, "rationalToDouble");
 		       predef(nameRationalToFloat,  "rationalToFloat");
 #if SHORT_CIRCUIT_COERCIONS

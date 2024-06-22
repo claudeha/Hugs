@@ -1042,6 +1042,7 @@ Bool interactive; {			/* by default in the context of */
 	    if (c==classRealFrac   || c==classRealFloat ||
 		c==classFractional || c==classFloating  ||
 		c==classReal	   || c==classIntegral  || c==classNum ||
+                (!haskell98 && c==classIsString) || /* OverloadedStrings */
 		(interactive && (c==classEq || c==classOrd || c==classShow)))
 		aNumClass = TRUE;
 	    else if (c!=classEq    && c!=classOrd  && c!=classShow &&

@@ -3880,10 +3880,21 @@ static Void local checkDefaultDefns() {	/* check that default types are	   */
 	classNum = findClass(findText("Num"));
     }
 
+    /* OverloadedStrings */
+    if (!haskell98) {
+	if (isNull(classIsString)) {
+	    classIsString = findClass(findText("IsString"));
+	}
+    }
+
     for (ds=defaultDefns; nonNull(ds); ds=tl(ds)) {
-	if (isNull(provePred(NIL,NIL,ap(classNum,hd(ds))))) {
+	if (isNull(provePred(NIL,NIL,ap(classNum,hd(ds))))
+	    && (haskell98 || isNull(provePred(NIL,NIL,ap(classIsString,hd(ds)))))) {
 	    ERRMSG(defaultLine)
-		"Default types must be instances of the Num class"
+		( haskell98
+                ? "Default types must be instances of the Num class"
+                : "Default types must be instances of the Num or IsString classes" /* OverloadedStrings */
+                )
 	    EEND;
 	}
     }

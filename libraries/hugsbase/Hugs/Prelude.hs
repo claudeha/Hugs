@@ -124,7 +124,11 @@ module Hugs.Prelude (
     boundedEnumFrom,
     boundedEnumFromTo,
     boundedEnumFromThen,
-    boundedEnumFromThenTo
+    boundedEnumFromThenTo,
+
+    -- OverloadedStrings
+--  module Data.String
+    IsString(fromString)
   ) where
 
 -- Standard value bindings {Prelude} ----------------------------------------
@@ -298,6 +302,14 @@ class (RealFrac a, Floating a) => RealFloat a where
 		      = pi    -- must be after the previous test on zero y
       | x==0 && y==0  = y     -- must be after the other double zero tests
       | otherwise     = x + y -- x or y is a NaN, return a NaN (via +)
+
+-- OverloadedStrings --------------------------------------------------------
+
+class (Eq a, Show a) => IsString a where
+    fromString :: String -> a
+
+instance IsString [Char] where
+    fromString xs = xs
 
 -- Numeric functions --------------------------------------------------------
 
@@ -2000,6 +2012,10 @@ primPmNpk n x     = if n'<=x then Just (x-n') else Nothing
 
 primPmSub        :: Integral a => Int -> a -> a
 primPmSub n x     = x - fromInt n
+
+-- OverloadedStrings
+primPmString    :: IsString a => String -> a -> Bool
+primPmString s x = fromString s == x
 
 -- Trex
 emptyRec :: Rec EmptyRow

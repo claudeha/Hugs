@@ -1,0 +1,18 @@
+--- base/Data/String.hs	2024-06-20 20:54:40.200804655 +0100
++++ basen/Data/String.hs	2024-06-21 20:55:54.600827606 +0100
+@@ -21,6 +21,10 @@
+ import GHC.Base
+ #endif
+ 
++#ifdef __HUGS__
++import Hugs.Prelude
++#else
++
+ -- | Class for string-like datastructures; used by the overloaded string
+ --   extension (-foverloaded-strings in GHC).
+ class IsString a where
+@@ -29,3 +33,4 @@
+ instance IsString [Char] where
+     fromString xs = xs
+ 
++#endif
