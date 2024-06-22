@@ -982,6 +982,8 @@ extern	Cell mkInt    Args((Int));
 #if BIGNUMS
 extern  Bool isBignum Args((Cell));
 #endif
+extern  Bool isStr    Args((Cell));
+extern  Text strOf    Args((Cell));
 
 /* --------------------------------------------------------------------------
  * Implementation of triples:

@@ -65,10 +65,13 @@ Class classRealFrac,   classRealFloat;
 Class classFractional, classFloating;
 Class classNum;
 
+Class classIsString;                    /* OverloadedStrings               */
+
 List stdDefaults;			/* standard default values	   */
 
 Name nameFromInt, nameFromDouble;	/* coercion of numerics		   */
 Name nameFromInteger;
+Name nameFromString;                    /* OverloadedStrings               */
 Name nameEq,      nameCompare;		/* derivable names		   */
 Name nameLe;
 Name nameShowsPrec;
@@ -243,6 +246,8 @@ static Cell  predMonad;			/* Monad (mkOffset(0))		   */
 #if MUDO
 static Cell  predMonadRec;		/* MonadRec/MonadFix (mkOffset(0)) */
 #endif
+/* OverloadedStrings */
+static Cell  predIsString;              /* IsString (mkOffset(0))          */
 
 /* --------------------------------------------------------------------------
  * Assumptions:
@@ -757,7 +762,15 @@ Cell e; {
 					   e);
 			  }
 
-	case STRCELL	: inferType(typeString,0);
+	case STRCELL	: if (haskell98) {
+			      inferType(typeString,0);
+			  } else { /* OverloadedStrings */
+			      Int alpha = newTyvars(1);
+			      inferType(aVar,alpha);
+			      return ap(ap(nameFromString,
+					   assumeEvid(predIsString,alpha)),
+					   e);
+			  }
 			  break;
 
 	case CHARCELL	: inferType(typeChar,0);
@@ -3060,6 +3073,7 @@ Int what; {
 		       mark(predNum);
 		       mark(predFractional);
 		       mark(predIntegral);
+		       mark(predIsString); /* OverloadedStrings */
 		       mark(starToStar);
 		       mark(predMonad);
 #if MUDO
@@ -3194,7 +3208,8 @@ Void linkPreludeTC() {			/* Hook to tycons and classes in   */
 	typeMaybe    = linkTycon("Maybe");
 	typeOrdering = linkTycon("Ordering");
 
-	stdDefaults  = cons(typeInteger,cons(typeDouble,NIL));
+	stdDefaults  = cons(typeInteger,cons(typeDouble,
+			haskell98 ? NIL : cons(typeString, NIL))); /* OverloadedStrings */
 
 	classEq      = linkClass("Eq");
 	classOrd     = linkClass("Ord");
@@ -3214,6 +3229,10 @@ Void linkPreludeTC() {			/* Hook to tycons and classes in   */
 	predNum	        = ap(classNum,aVar);
 	predFractional  = ap(classFractional,aVar);
 	predIntegral    = ap(classIntegral,aVar);
+
+	/* OverloadedStrings */
+	classIsString   = linkClass("IsString");
+	predIsString    = ap(classIsString,aVar);
 
 	classMonad      = linkClass("Monad");
 	predMonad       = ap(classMonad,aVar);
@@ -3276,6 +3295,7 @@ Void linkPreludeCM() {			/* Hook to cfuns and mfuns in	   */
 	nameFromInt     = linkName("fromInt");
 	nameFromInteger = linkName("fromInteger");
 	nameFromDouble  = linkName("fromDouble");
+	nameFromString  = linkName("fromString"); /* OverloadedStrings */
 	nameEq	        = linkName("==");
 	nameCompare     = linkName("compare");
 	nameLe	        = linkName("<=");

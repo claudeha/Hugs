@@ -780,7 +780,8 @@ Cell pat; {                       /* test with pat.                        */
 static Cell local refutePatAp(p)  /* find pattern to refute in conformality*/
 Cell p; {
     Cell h = getHead(p);
-    if (h==nameFromInt || h==nameFromInteger || h==nameFromDouble)
+    if (h==nameFromInt || h==nameFromInteger || h==nameFromDouble
+        || (!haskell98 && h==nameFromString)) /* OverloadedStrings */
 	return p;
 #if NPLUSK
     else if (whatIs(h)==ADDPAT)
@@ -851,7 +852,8 @@ Cell pat; {                     /* replaces parts of pattern that do not   */
 	case NAME      :
 	case AP        : {   Cell h = getHead(pat);
 			     if (h==nameFromInt     ||
-				 h==nameFromInteger || h==nameFromDouble)
+				 h==nameFromInteger || h==nameFromDouble ||
+                                 (!haskell98 && h==nameFromString)) /* OverloadedStrings */
 				 return WILDCARD;
 #if NPLUSK
 			     else if (whatIs(h)==ADDPAT)
@@ -1009,7 +1011,8 @@ List lds; {
 	case VAROPCELL : return addEqn(pat,expr,lds);
 
 	case NAME      : if (c==nameFromInt || c==nameFromInteger
-					    || c==nameFromDouble) {
+					    || c==nameFromDouble
+                             || (!haskell98 && c==nameFromString)) { /* OverloadedStrings */
 			     if (argCount==2)
 				 arg(fun(pat)) = translate(arg(fun(pat)));
 			     break;
@@ -1522,7 +1525,8 @@ Cell ma; {                      /* match, ma.                              */
 		       return h;
 #endif
 	case NAME    : if (h==nameFromInt || h==nameFromInteger
-					  || h==nameFromDouble) {
+					  || h==nameFromDouble
+                           || (!haskell98 && h==nameFromString)) { /* OverloadedStrings */
 			   if (argCount==2)
 			       arg(fun(p)) = translate(arg(fun(p)));
 			   return p;
@@ -1588,6 +1592,9 @@ Cell d1, d2; {                          /* descriptors have same value     */
     if (isBignum(arg(d1)))
 	return isBignum(arg(d2)) && bigCmp(arg(d1),arg(d2))==0;
 #endif
+    /* OverloadedStrings */
+    if (isStr(arg(d1)))
+	return isStr(arg(d2)) && strOf(arg(d1))==strOf(arg(d2));
     internal("eqNumDiscr");
     return FALSE;/*NOTREACHED*/
 }
