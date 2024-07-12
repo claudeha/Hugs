@@ -192,22 +192,14 @@ Bignum n; {
 		m = digitOf(hd(ds));
 		while (nonNull(ds=tl(ds))) {
 		    Int d = digitOf(hd(ds));
-		    if (b > (Int)(MAXHUGSWORD/BIGBASE))
-			return NIL;
 		    b *= BIGBASE;
-		    if (d > (Int)((MAXHUGSWORD - m)/b))
-			return NIL;
 		    m += b*d;
 		}
 	    } else { /* fst(n)==NEGNUM */
 		m = - digitOf(hd(ds));
 		while (nonNull(ds=tl(ds))) {
 		    Int d = - digitOf(hd(ds));
-		    if (b > (MAXPOSINT/BIGBASE))
-			return NIL;
 		    b *= BIGBASE;
-		    if (d < (MINNEGINT - m)/b)
-			return NIL;
 		    m += b*d;
 		}
 	    }
